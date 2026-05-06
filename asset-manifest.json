@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/CheckVoice/static/css/main.e909da80.css",
+    "main.js": "/CheckVoice/static/js/main.8b4f2cb8.js",
+    "index.html": "/CheckVoice/index.html",
+    "main.e909da80.css.map": "/CheckVoice/static/css/main.e909da80.css.map",
+    "main.8b4f2cb8.js.map": "/CheckVoice/static/js/main.8b4f2cb8.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e909da80.css",
+    "static/js/main.8b4f2cb8.js"
+  ]
+}
