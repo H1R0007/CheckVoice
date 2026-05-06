@@ -159,10 +159,13 @@ export class App extends React.Component {
 
   persistState() {
     const { currentReceipt, savedReceipts, lastExportedAt, categoryLearning } = this.state;
+
+    // eslint-disable-next-line no-unused-vars
     const { _editingReceiptId, _editingReceiptDate, _editingReceiptCreatedAt, ...cleanReceipt } = currentReceipt;
+
     const stateToSave = {
       version: 2,
-      currentReceipt,
+      currentReceipt: cleanReceipt,
       savedReceipts,
       lastExportedAt,
       categoryLearning,
@@ -172,7 +175,6 @@ export class App extends React.Component {
 
     if (result.success) {
       this.setState({ storageInfo: getStorageInfo() });
-
       if (result.warning) {
         this.showNotification('warning', result.message);
       }
