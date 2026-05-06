@@ -1,0 +1,272 @@
+/* src/styles/animations.css */
+/* ============================================
+   CheckVoice — Анимации и переходы
+   ============================================ */
+
+/* ----------------------------------------
+   Появление элементов
+   ---------------------------------------- */
+
+@keyframes cv-fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes cv-fade-in-up {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes cv-fade-in-down {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes cv-slide-in-up {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes cv-scale-in {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* ----------------------------------------
+   Уведомления
+   ---------------------------------------- */
+
+@keyframes cv-toast-in {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-16px) scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0) scale(1);
+    }
+}
+
+@keyframes cv-toast-out {
+    from {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0) scale(1);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-16px) scale(0.96);
+    }
+}
+
+/* ----------------------------------------
+   Диалоги
+   ---------------------------------------- */
+
+@keyframes cv-overlay-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes cv-dialog-in {
+    from {
+        opacity: 0;
+        transform: scale(0.94) translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* ----------------------------------------
+   Элементы списка
+   ---------------------------------------- */
+
+@keyframes cv-item-in {
+    from {
+        opacity: 0;
+        transform: translateX(-12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes cv-item-remove {
+    to {
+        opacity: 0;
+        transform: translateX(24px);
+        max-height: 0;
+        margin-bottom: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+}
+
+/* ----------------------------------------
+   Числовой «одометр»
+   ---------------------------------------- */
+
+@keyframes cv-number-up {
+    from {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes cv-number-bump {
+    0% {
+        transform: scale(1);
+    }
+
+    40% {
+        transform: scale(1.06);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* ----------------------------------------
+   Пульсация (голосовой ввод, загрузка)
+   ---------------------------------------- */
+
+@keyframes cv-pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+@keyframes cv-pulse-ring {
+    0% {
+        transform: scale(0.8);
+        opacity: 0.6;
+    }
+
+    100% {
+        transform: scale(1.8);
+        opacity: 0;
+    }
+}
+
+/* ----------------------------------------
+   Индикатор прогресса (toast auto-close)
+   ---------------------------------------- */
+
+@keyframes cv-progress-shrink {
+    from {
+        transform: scaleX(1);
+    }
+
+    to {
+        transform: scaleX(0);
+    }
+}
+
+/* ----------------------------------------
+   Утилитарные классы анимаций
+   ---------------------------------------- */
+
+.cv-animate-fade-in {
+    animation: cv-fade-in var(--transition-base) both;
+}
+
+.cv-animate-fade-in-up {
+    animation: cv-fade-in-up var(--transition-slow) both;
+}
+
+.cv-animate-slide-in-up {
+    animation: cv-slide-in-up var(--transition-slow) both;
+}
+
+.cv-animate-scale-in {
+    animation: cv-scale-in var(--transition-base) both;
+}
+
+/* Задержки для каскадного появления */
+.cv-delay-1 {
+    animation-delay: 50ms;
+}
+
+.cv-delay-2 {
+    animation-delay: 100ms;
+}
+
+.cv-delay-3 {
+    animation-delay: 150ms;
+}
+
+.cv-delay-4 {
+    animation-delay: 200ms;
+}
+
+.cv-delay-5 {
+    animation-delay: 250ms;
+}
+
+/* ----------------------------------------
+   Respect user preferences
+   ---------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

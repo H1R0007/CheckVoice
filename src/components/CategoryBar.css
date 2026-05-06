@@ -1,0 +1,101 @@
+/* src/components/CategoryBar.css */
+
+.category-bar {
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid var(--color-border);
+    animation: cv-category-bar-in var(--transition-slow) both;
+}
+
+    .category-bar:last-child {
+        border-bottom: none;
+    }
+
+@keyframes cv-category-bar-in {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.category-bar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-bottom: var(--space-2);
+}
+
+.category-bar-left {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
+.category-bar-name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+}
+
+.category-bar-count {
+    flex-shrink: 0;
+    font-size: var(--font-size-xs);
+    color: var(--color-text-tertiary);
+}
+
+.category-bar-amount {
+    flex-shrink: 0;
+    margin-left: var(--space-3);
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    text-align: right;
+}
+
+/* Прогресс-бар */
+.category-bar-track {
+    position: relative;
+    height: 8px;
+    overflow: hidden;
+    border-radius: var(--radius-pill);
+    background-color: var(--color-bg-inset);
+}
+
+.category-bar-fill {
+    height: 100%;
+    width: 100%;
+    min-width: 0;
+    border-radius: inherit;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform var(--transition-slow), background-color var(--transition-fast), opacity var(--transition-fast);
+    will-change: transform, opacity;
+}
+
+.category-bar-percent {
+    margin-top: var(--space-1);
+    text-align: right;
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-tertiary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .category-bar,
+    .category-bar-fill {
+        animation: none !important;
+        transition: none !important;
+    }
+}

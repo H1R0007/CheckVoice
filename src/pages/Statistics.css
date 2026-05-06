@@ -1,0 +1,90 @@
+.statistics {
+    padding-bottom: var(--space-8);
+}
+
+/* --- Карточка общей суммы --- */
+
+.stats-summary {
+    background-color: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    margin-bottom: var(--space-8);
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    animation: cv-fade-in-up var(--transition-slow) both;
+}
+
+.stats-summary-label {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-tertiary);
+    margin-bottom: var(--space-2);
+}
+
+.stats-summary-amount {
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-accent);
+    margin-bottom: var(--space-2);
+    letter-spacing: var(--letter-spacing-tight);
+}
+
+.stats-summary-details {
+    display: flex;
+    gap: var(--space-2);
+    justify-content: center;
+    flex-wrap: wrap;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-tertiary);
+}
+
+/* --- Секция «По категориям» --- */
+
+.stats-section-title {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-tertiary);
+    margin: 0 0 var(--space-4) 0;
+    text-transform: uppercase;
+    letter-spacing: var(--letter-spacing-caps);
+}
+
+.stats-categories {
+    background-color: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-3) var(--space-5);
+    margin-bottom: var(--space-8);
+    box-shadow: var(--shadow-xs);
+}
+
+/* --- Среднее за чек --- */
+
+.stats-average {
+    background-color: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5) var(--space-6);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    box-shadow: var(--shadow-xs);
+    animation: cv-fade-in-up 400ms ease-out both;
+    animation-delay: 200ms;
+}
+
+.stats-average-label {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+}
+
+.stats-average-amount {
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin-left: auto;
+}

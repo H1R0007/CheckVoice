@@ -1,0 +1,63 @@
+/* src/components/StorageIndicator.css */
+
+.storage-indicator {
+    background-color: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    margin-bottom: var(--space-8);
+    box-shadow: var(--shadow-xs);
+}
+
+.storage-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-1);
+}
+
+.storage-title {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: var(--letter-spacing-caps);
+}
+
+.storage-values {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-tertiary);
+    font-weight: var(--font-weight-medium);
+    font-family: var(--font-family-mono);
+}
+
+/* Прогресс-бар */
+.storage-bar {
+    height: 6px;
+    background-color: var(--color-bg-inset);
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+    margin-bottom: var(--space-3);
+}
+
+.storage-bar-fill {
+    height: 100%;
+    border-radius: var(--radius-pill);
+    background-color: var(--color-accent);
+    transition: width var(--transition-slow), background-color var(--transition-slow);
+    min-width: 2px;
+}
+
+/* Цвета по степени заполненности */
+.storage-bar-fill--warning {
+    background-color: var(--color-warning);
+}
+
+.storage-bar-fill--danger {
+    background-color: var(--color-danger);
+}
+
+.storage-footer {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-tertiary);
+}

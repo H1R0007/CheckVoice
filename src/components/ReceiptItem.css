@@ -1,0 +1,331 @@
+/* src/components/ReceiptItem.css */
+
+.receipt-item {
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px dashed var(--color-border-dashed);
+    touch-action: pan-y;
+    animation: cv-item-in 250ms ease-out both;
+}
+
+    .receipt-item:last-child {
+        border-bottom: none;
+    }
+
+@keyframes cv-item-in {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --- Красная зона удаления --- */
+
+.receipt-item-delete-zone {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: var(--space-6);
+    background-color: var(--color-danger);
+    color: var(--color-text-inverse);
+}
+
+/* --- Контент товара --- */
+
+.receipt-item-content {
+    position: relative;
+    z-index: 1;
+    padding: var(--space-4) var(--space-5);
+    background-color: var(--color-bg-surface);
+    transition: transform 200ms ease-out, background-color var(--transition-fast), box-shadow var(--transition-fast);
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+    .receipt-item-content.swiping {
+        transition: none;
+    }
+
+    .receipt-item-content.low-confidence {
+        box-shadow: inset 3px 0 0 var(--color-warning);
+    }
+
+    .receipt-item-content.learned-exact {
+        box-shadow: inset 3px 0 0 var(--color-accent);
+    }
+
+@media (hover: hover) and (pointer: fine) {
+    .receipt-item:not(.read-only) .receipt-item-content:hover {
+        background-color: var(--color-bg-surface-hover);
+    }
+}
+
+/* --- Основная строка --- */
+
+.item-main {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: var(--space-2);
+}
+
+.item-info {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    gap: var(--space-2);
+}
+
+.item-number {
+    flex-shrink: 0;
+    min-width: 22px;
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-tertiary);
+}
+
+.item-title {
+    color: var(--color-text-primary);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-base);
+    word-break: break-word;
+}
+
+/* --- Цена --- */
+
+.item-price-block {
+    flex-shrink: 0;
+    margin-left: var(--space-3);
+}
+
+.item-price {
+    padding: 0;
+    border: none;
+    background: none;
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    white-space: nowrap;
+    line-height: 1.2;
+}
+
+    .item-price.editable {
+        cursor: pointer;
+        border-bottom: 1px dashed var(--color-border-dashed);
+        transition: border-color var(--transition-fast), color var(--transition-fast);
+    }
+
+    .item-price:disabled {
+        cursor: default;
+        opacity: 1;
+    }
+
+    .item-price:focus-visible {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 3px;
+        border-radius: 2px;
+    }
+
+@media (hover: hover) and (pointer: fine) {
+    .item-price.editable:hover {
+        border-color: var(--color-accent);
+        color: var(--color-accent);
+    }
+}
+
+/* --- Редактирование цены --- */
+
+.item-price-edit {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+}
+
+.price-edit-input {
+    width: 80px;
+    padding: var(--space-1) var(--space-2);
+    border: 2px solid var(--color-accent);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-bg-inset);
+    color: var(--color-text-primary);
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    text-align: right;
+    outline: none;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+    .price-edit-input:focus-visible {
+        border-color: var(--color-accent-hover);
+        box-shadow: 0 0 0 3px var(--color-accent-soft);
+    }
+
+.price-edit-currency {
+    font-family: var(--font-family-mono);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-tertiary);
+}
+
+/* --- Нижняя строка --- */
+
+.item-bottom {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-3);
+}
+
+.item-category-area {
+    flex: 1;
+    min-width: 0;
+}
+
+.item-category-editor {
+    display: block;
+    min-width: 0;
+}
+
+.item-category-select {
+    max-width: 220px;
+    width: 100%;
+    height: 32px;
+    padding: 0 var(--space-3);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    background-color: var(--color-bg-surface);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    outline: none;
+    cursor: pointer;
+    transition: border-color var(--transition-fast), background-color var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+    .item-category-select:hover {
+        border-color: var(--color-border-hover);
+        background-color: var(--color-bg-surface-hover);
+    }
+
+    .item-category-select:focus-visible {
+        border-color: var(--color-accent);
+        box-shadow: 0 0 0 3px var(--color-accent-soft);
+    }
+
+.item-category-select--low-confidence {
+    border-color: var(--color-warning);
+    box-shadow: 0 0 0 2px var(--color-warning-soft);
+}
+
+.item-category-select--learned {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 2px var(--color-accent-soft);
+}
+
+.item-category-hint {
+    margin-top: var(--space-1);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--font-size-xs);
+    color: var(--color-warning);
+    line-height: 1.2;
+}
+
+.item-category-hint--learned {
+    color: var(--color-accent);
+}
+
+.item-delete-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    padding: var(--space-1) var(--space-2);
+    border: none;
+    border-radius: var(--radius-sm);
+    background: none;
+    color: var(--color-text-placeholder);
+    cursor: pointer;
+    transition: color var(--transition-fast), background-color var(--transition-fast), transform var(--transition-fast);
+}
+
+    .item-delete-btn:active {
+        transform: scale(0.96);
+    }
+
+    .item-delete-btn:focus-visible {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+    }
+
+@media (hover: hover) and (pointer: fine) {
+    .item-delete-btn:hover {
+        color: var(--color-danger);
+        background-color: var(--color-danger-soft);
+    }
+}
+
+/* --- Удаление --- */
+
+.receipt-item.removing {
+    animation: cv-item-slide-out 300ms ease-in forwards;
+    pointer-events: none;
+}
+
+@keyframes cv-item-slide-out {
+    0% {
+        opacity: 1;
+        max-height: 200px;
+    }
+
+    40% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 0;
+        max-height: 0;
+        border-bottom-width: 0;
+        overflow: hidden;
+    }
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .receipt-item,
+    .receipt-item-content,
+    .item-price,
+    .price-edit-input,
+    .item-delete-btn,
+    .item-category-select,
+    .receipt-item.removing {
+        animation: none !important;
+        transition: none !important;
+    }
+}

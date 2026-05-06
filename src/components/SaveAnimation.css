@@ -1,0 +1,374 @@
+/* src/components/SaveAnimation.css */
+
+.save-animation {
+    position: absolute;
+    inset: 0;
+    z-index: 60;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    pointer-events: none;
+    isolation: isolate;
+    will-change: opacity, transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+/* ��� */
+.save-animation-backdrop {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    animation: cv-save-backdrop-in 220ms ease-out both;
+    will-change: opacity;
+    transform: translateZ(0);
+}
+
+[data-theme="dark"] .save-animation-backdrop,
+[data-theme="midnight"] .save-animation-backdrop {
+    background-color: rgba(0, 0, 0, 0.62);
+}
+
+@keyframes cv-save-backdrop-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* ����� �����, �� ������� �� ������������ */
+.save-animation-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 240px;
+    height: 240px;
+    transform: translate(-50%, -50%) translateZ(0);
+    transform-origin: center center;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+}
+
+/* ����������� ���� */
+.save-animation-circle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: radial-gradient( circle, var(--color-accent) 0%, var(--color-accent-hover) 100% );
+    box-shadow: 0 0 20px var(--color-accent-soft), 0 0 40px var(--color-accent-soft);
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.15) translateZ(0);
+    transform-origin: center center;
+    animation: cv-save-circle-grow 420ms cubic-bezier(0.16, 1, 0.3, 1) 80ms forwards;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+}
+
+@keyframes cv-save-circle-grow {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.15) translateZ(0);
+    }
+
+    60% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.05) translateZ(0);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1) translateZ(0);
+    }
+}
+
+/* SVG */
+.save-animation-check {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 3;
+    width: 72px;
+    height: 72px;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.72) rotate(-8deg) translateZ(0);
+    transform-origin: center center;
+    animation: cv-save-check-pop 320ms cubic-bezier(0.34, 1.56, 0.64, 1) 320ms forwards;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+}
+
+    .save-animation-check svg,
+    svg.save-animation-check {
+        display: block;
+        overflow: visible;
+    }
+
+@keyframes cv-save-check-pop {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.72) rotate(-8deg) translateZ(0);
+    }
+
+    60% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.08) rotate(1deg) translateZ(0);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1) rotate(0deg) translateZ(0);
+    }
+}
+
+/* ������ */
+.save-animation-ring {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.92);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 204.2;
+    stroke-dashoffset: 204.2;
+    animation: cv-save-ring-draw 520ms ease-out 430ms forwards;
+    shape-rendering: geometricPrecision;
+}
+
+.save-animation-tick {
+    fill: none;
+    stroke: #ffffff;
+    stroke-width: 4.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 40;
+    stroke-dashoffset: 40;
+    animation: cv-save-tick-draw 260ms ease-out 620ms forwards;
+    shape-rendering: geometricPrecision;
+}
+
+@keyframes cv-save-tick-draw {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+/* ������ */
+.save-animation-pulse {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 2;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.34);
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1) translateZ(0);
+    transform-origin: center center;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+}
+
+.save-animation-pulse--1 {
+    animation: cv-save-pulse-expand 620ms ease-out 700ms forwards;
+}
+
+.save-animation-pulse--2 {
+    animation: cv-save-pulse-expand 620ms ease-out 840ms forwards;
+}
+
+@keyframes cv-save-pulse-expand {
+    0% {
+        opacity: 0.42;
+        transform: translate(-50%, -50%) scale(1) translateZ(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(2.3) translateZ(0);
+    }
+}
+
+/* ������� */
+.save-animation-particles {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 4;
+    width: 180px;
+    height: 180px;
+    transform: translate(-50%, -50%) translateZ(0);
+    pointer-events: none;
+    will-change: transform;
+}
+
+.save-animation-particle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 6px;
+    height: 6px;
+    margin-top: -3px;
+    margin-left: -3px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.82);
+    opacity: 0;
+    transform: translate3d(0, 0, 0) scale(0.8);
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+}
+
+    .save-animation-particle:nth-child(1) {
+        --px: -34px;
+        --py: -42px;
+        animation: cv-particle-burst 520ms ease-out 680ms forwards;
+    }
+
+    .save-animation-particle:nth-child(2) {
+        --px: 38px;
+        --py: -30px;
+        animation: cv-particle-burst 520ms ease-out 720ms forwards;
+    }
+
+    .save-animation-particle:nth-child(3) {
+        --px: 42px;
+        --py: 26px;
+        animation: cv-particle-burst 520ms ease-out 700ms forwards;
+    }
+
+    .save-animation-particle:nth-child(4) {
+        --px: -30px;
+        --py: 38px;
+        animation: cv-particle-burst 520ms ease-out 740ms forwards;
+    }
+
+    .save-animation-particle:nth-child(5) {
+        --px: -46px;
+        --py: 4px;
+        animation: cv-particle-burst 520ms ease-out 710ms forwards;
+    }
+
+    .save-animation-particle:nth-child(6) {
+        --px: 26px;
+        --py: -46px;
+        animation: cv-particle-burst 520ms ease-out 750ms forwards;
+    }
+
+@keyframes cv-particle-burst {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 0, 0) scale(0.8);
+    }
+
+    18% {
+        opacity: 1;
+        transform: translate3d(calc(var(--px) * 0.35), calc(var(--py) * 0.35), 0) scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate3d(var(--px), var(--py), 0) scale(0.35);
+    }
+}
+
+/* ����� */
+.save-animation-text {
+    position: absolute;
+    top: calc(50% + 112px);
+    left: 50%;
+    z-index: 5;
+    min-width: 160px;
+    text-align: center;
+    opacity: 0;
+    transform: translate(-50%, 8px) translateZ(0);
+    animation: cv-save-text-appear 260ms ease-out 820ms forwards;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+}
+
+.save-animation-text-main {
+    display: block;
+    margin-bottom: var(--space-1);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.2;
+    color: var(--color-accent);
+}
+
+.save-animation-text-sub {
+    display: block;
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.2;
+    color: var(--color-text-secondary);
+}
+
+@keyframes cv-save-text-appear {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, 8px) translateZ(0);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate(-50%, 0) translateZ(0);
+    }
+}
+
+/* ����� ������� */
+.save-animation.fading {
+    animation: cv-save-all-fadeout 240ms ease-in forwards;
+}
+
+@keyframes cv-save-all-fadeout {
+    0% {
+        opacity: 1;
+        transform: translateZ(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateZ(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .save-animation-backdrop,
+    .save-animation-circle,
+    .save-animation-check,
+    .save-animation-ring,
+    .save-animation-tick,
+    .save-animation-pulse,
+    .save-animation-particle,
+    .save-animation-text,
+    .save-animation.fading {
+        animation-duration: 1ms !important;
+        animation-delay: 0ms !important;
+    }
+
+    .save-animation-backdrop,
+    .save-animation-circle,
+    .save-animation-check,
+    .save-animation-text {
+        opacity: 1 !important;
+    }
+
+    .save-animation-circle {
+        transform: translate(-50%, -50%) scale(1) translateZ(0) !important;
+    }
+
+    .save-animation-check {
+        transform: translate(-50%, -50%) scale(1) rotate(0deg) translateZ(0) !important;
+    }
+
+    .save-animation-text {
+        transform: translate(-50%, 0) translateZ(0) !important;
+    }
+}

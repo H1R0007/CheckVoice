@@ -1,0 +1,114 @@
+/* src/components/ReceiptTotal.css */
+
+/* ============================================
+   Полная карточка
+   ============================================ */
+
+.receipt-total {
+    margin-top: var(--space-4);
+    padding: var(--space-5) var(--space-6);
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background-color: var(--color-bg-surface);
+    box-shadow: var(--shadow-xs);
+}
+
+.receipt-total-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-4);
+}
+
+.receipt-total-label {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+}
+
+.receipt-total-amount {
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    line-height: 1;
+    color: var(--color-accent);
+    white-space: nowrap;
+}
+
+.receipt-total-amount.is-bumping {
+    animation: cv-receipt-total-bump 300ms ease-out;
+}
+
+@keyframes cv-receipt-total-bump {
+    0% {
+        opacity: 0.75;
+        transform: scale(0.98);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.receipt-total-count {
+    margin-top: var(--space-1);
+
+    font-size: var(--font-size-sm);
+    line-height: 1.4;
+    color: var(--color-text-tertiary);
+    text-align: right;
+}
+
+/* ============================================
+   Компактный вариант
+   ============================================ */
+
+.receipt-total--compact {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+
+    margin: 0;
+    padding: var(--space-3) var(--space-5);
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    background-color: var(--color-bg-elevated);
+    box-shadow: var(--shadow-md);
+}
+
+.receipt-total--compact .receipt-total-row {
+    align-items: baseline;
+    justify-content: flex-start;
+    gap: var(--space-2);
+}
+
+.receipt-total--compact .receipt-total-label {
+    font-size: var(--font-size-sm);
+}
+
+.receipt-total--compact .receipt-total-amount {
+    font-size: var(--font-size-lg);
+}
+
+.receipt-total--compact .receipt-total-count {
+    margin-top: 0;
+    font-size: var(--font-size-xs);
+    line-height: 1;
+    color: var(--color-text-tertiary);
+    white-space: nowrap;
+}
+
+.receipt-total-divider {
+    font-size: var(--font-size-sm);
+    line-height: 1;
+    color: var(--color-text-placeholder);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .receipt-total-amount.is-bumping {
+        animation: none !important;
+    }
+}

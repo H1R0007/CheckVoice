@@ -1,0 +1,103 @@
+/* src/styles/theme-dark.css */
+/* ============================================
+   CheckVoice — Тёмная тема «Глубокий изумруд»
+   Активируется через data-theme="dark" на <html>
+   ============================================ */
+
+[data-theme="dark"] {
+    /* Фоны */
+    --color-bg-primary: #0A1A14;
+    --color-bg-secondary: #0E2018;
+    --color-bg-surface: #14302A;
+    --color-bg-surface-hover: #193830;
+    --color-bg-elevated: #1A3A32;
+    --color-bg-inset: #0D1E16;
+    /* Текст */
+    --color-text-primary: #E8F0EC;
+    --color-text-secondary: #A0B8AC;
+    --color-text-tertiary: #6E8C7C;
+    --color-text-placeholder: #4A6E5A;
+    --color-text-inverse: #0A1A14;
+    /* Акцент */
+    --color-accent: #4ADE80;
+    --color-accent-hover: #6EE7A0;
+    --color-accent-active: #86EFAC;
+    --color-accent-soft: rgba(74, 222, 128, 0.12);
+    --color-accent-medium: rgba(74, 222, 128, 0.20);
+    /* Вторичный */
+    --color-secondary: #FBBF24;
+    --color-secondary-soft: rgba(251, 191, 36, 0.12);
+    --color-secondary-medium: rgba(251, 191, 36, 0.20);
+    /* Деструктивный */
+    --color-danger: #F87171;
+    --color-danger-hover: #FCA5A5;
+    --color-danger-soft: rgba(248, 113, 113, 0.10);
+    --color-danger-medium: rgba(248, 113, 113, 0.18);
+    /* Успех / Предупреждение */
+    --color-success: #4ADE80;
+    --color-success-soft: rgba(74, 222, 128, 0.12);
+    --color-warning: #FBBF24;
+    --color-warning-soft: rgba(251, 191, 36, 0.12);
+    /* Границы */
+    --color-border: rgba(232, 240, 236, 0.10);
+    --color-border-hover: rgba(232, 240, 236, 0.18);
+    --color-border-dashed: rgba(232, 240, 236, 0.15);
+    /* Тени (на тёмном фоне — глубже) */
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.20);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.15);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.30), 0 2px 4px rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.35), 0 4px 8px rgba(0, 0, 0, 0.20);
+    --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.40), 0 8px 16px rgba(0, 0, 0, 0.25);
+    --shadow-dialog: 0 20px 60px rgba(0, 0, 0, 0.50), 0 8px 20px rgba(0, 0, 0, 0.30);
+    /* Оверлей */
+    --color-overlay: rgba(0, 0, 0, 0.55);
+    /* Категории (ярче на тёмном фоне) */
+    --cat-fish: #4DB8B8;
+    --cat-fish-soft: rgba(77, 184, 184, 0.15);
+    --cat-dairy: #5EAAD4;
+    --cat-dairy-soft: rgba(94, 170, 212, 0.15);
+    --cat-deli: #E07850;
+    --cat-deli-soft: rgba(224, 120, 80, 0.15);
+    --cat-meat: #D46060;
+    --cat-meat-soft: rgba(212, 96, 96, 0.15);
+    --cat-spices: #D4B240;
+    --cat-spices-soft: rgba(212, 178, 64, 0.15);
+    --cat-bread: #D4A050;
+    --cat-bread-soft: rgba(212, 160, 80, 0.15);
+    --cat-fruits: #6EBA6E;
+    --cat-fruits-soft: rgba(110, 186, 110, 0.15);
+    --cat-vegetables: #82B84E;
+    --cat-vegetables-soft: rgba(130, 184, 78, 0.15);
+    --cat-cereals: #B8AC4E;
+    --cat-cereals-soft: rgba(184, 172, 78, 0.15);
+    --cat-canned: #D48850;
+    --cat-canned-soft: rgba(212, 136, 80, 0.15);
+    --cat-frozen: #6EA8D4;
+    --cat-frozen-soft: rgba(110, 168, 212, 0.15);
+    --cat-drinks-nonalc: #A882CC;
+    --cat-drinks-nonalc-soft: rgba(168, 130, 204, 0.15);
+    --cat-drinks-alc: #8468BA;
+    --cat-drinks-alc-soft: rgba(132, 104, 186, 0.15);
+    --cat-sweets: #D482A0;
+    --cat-sweets-soft: rgba(212, 130, 160, 0.15);
+    --cat-baby: #E4C050;
+    --cat-baby-soft: rgba(228, 192, 80, 0.15);
+    --cat-pets: #A89080;
+    --cat-pets-soft: rgba(168, 144, 128, 0.15);
+    --cat-household: #A89888;
+    --cat-household-soft: rgba(168, 152, 136, 0.15);
+    --cat-hygiene: #5EB8C4;
+    --cat-hygiene-soft: rgba(94, 184, 196, 0.15);
+    --cat-other: #B8B4AE;
+    --cat-other-soft: rgba(184, 180, 174, 0.15);
+}
+
+    /* Фон body для тёмной темы */
+    [data-theme="dark"] body {
+        background-image: radial-gradient(ellipse at 20% 0%, rgba(74, 222, 128, 0.04) 0%, transparent 60%), radial-gradient(ellipse at 80% 100%, rgba(251, 191, 36, 0.03) 0%, transparent 60%);
+    }
+
+    /* Навбар — полупрозрачный тёмный */
+    [data-theme="dark"] .navigation-bar {
+        background-color: rgba(10, 26, 20, 0.90);
+    }

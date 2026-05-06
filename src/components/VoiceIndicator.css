@@ -1,0 +1,206 @@
+/* src/components/VoiceIndicator.css */
+
+.voice-indicator {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    min-height: 36px;
+    padding: var(--space-2) var(--space-4);
+    border: 1px solid var(--color-accent-medium);
+    border-radius: var(--radius-pill);
+    background-color: var(--color-accent-soft);
+    color: var(--color-accent);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    line-height: 1;
+    white-space: nowrap;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    will-change: opacity, transform;
+    animation: cv-voice-indicator-in 180ms ease-out both;
+}
+
+@keyframes cv-voice-indicator-in {
+    from {
+        opacity: 0;
+        transform: translateY(4px) translateZ(0);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) translateZ(0);
+    }
+}
+
+/* Пульсирующая точка */
+.voice-indicator-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background-color: currentColor;
+    flex-shrink: 0;
+    animation: cv-voice-dot-pulse 1.1s ease-in-out infinite;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    will-change: transform, opacity;
+}
+
+@keyframes cv-voice-dot-pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1) translateZ(0);
+    }
+
+    50% {
+        opacity: 0.45;
+        transform: scale(0.78) translateZ(0);
+    }
+}
+
+/* Звуковые столбики */
+.voice-indicator-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 18px;
+    flex-shrink: 0;
+    transform: translateZ(0);
+}
+
+.voice-indicator-bar {
+    width: 3px;
+    height: 18px;
+    border-radius: 999px;
+    background-color: currentColor;
+    transform-origin: center bottom;
+    transform: scaleY(0.35) translateZ(0);
+    opacity: 0.55;
+    animation: cv-voice-bar-bounce 900ms ease-in-out infinite;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+}
+
+    .voice-indicator-bar:nth-child(1) {
+        animation-delay: 0ms;
+    }
+
+    .voice-indicator-bar:nth-child(2) {
+        animation-delay: 100ms;
+    }
+
+    .voice-indicator-bar:nth-child(3) {
+        animation-delay: 200ms;
+    }
+
+    .voice-indicator-bar:nth-child(4) {
+        animation-delay: 300ms;
+    }
+
+    .voice-indicator-bar:nth-child(5) {
+        animation-delay: 400ms;
+    }
+
+        .voice-indicator-bar:nth-child(1)::before,
+        .voice-indicator-bar:nth-child(2)::before,
+        .voice-indicator-bar:nth-child(3)::before,
+        .voice-indicator-bar:nth-child(4)::before,
+        .voice-indicator-bar:nth-child(5)::before {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 100%;
+            border-radius: inherit;
+            background: currentColor;
+        }
+
+    .voice-indicator-bar:nth-child(1) {
+        height: 8px;
+    }
+
+    .voice-indicator-bar:nth-child(2) {
+        height: 12px;
+    }
+
+    .voice-indicator-bar:nth-child(3) {
+        height: 18px;
+    }
+
+    .voice-indicator-bar:nth-child(4) {
+        height: 12px;
+    }
+
+    .voice-indicator-bar:nth-child(5) {
+        height: 8px;
+    }
+
+@keyframes cv-voice-bar-bounce {
+    0%, 100% {
+        opacity: 0.45;
+        transform: scaleY(0.45) translateZ(0);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scaleY(1) translateZ(0);
+    }
+}
+
+/* Текст */
+.voice-indicator-text {
+    display: inline-block;
+    white-space: nowrap;
+}
+
+/* Иконки */
+.voice-indicator svg {
+    flex-shrink: 0;
+    display: block;
+}
+
+/* Статусы */
+.voice-indicator--listening {
+    background-color: var(--color-accent-soft);
+    border-color: var(--color-accent-medium);
+    color: var(--color-accent);
+}
+
+.voice-indicator--processing {
+    background-color: var(--color-secondary-soft);
+    border-color: var(--color-secondary-medium);
+    color: var(--color-secondary);
+}
+
+.voice-indicator--success {
+    background-color: var(--color-success-soft);
+    border-color: var(--color-success);
+    color: var(--color-success);
+}
+
+.voice-indicator--error {
+    background-color: var(--color-danger-soft);
+    border-color: var(--color-danger-medium);
+    color: var(--color-danger);
+}
+
+/* Можно слегка успокоить success/error */
+.voice-indicator--success,
+.voice-indicator--error {
+    animation-duration: 140ms;
+}
+
+/* Уважение системных настроек */
+@media (prefers-reduced-motion: reduce) {
+    .voice-indicator,
+    .voice-indicator-dot,
+    .voice-indicator-bar {
+        animation: none !important;
+    }
+
+    .voice-indicator-dot,
+    .voice-indicator-bar {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}

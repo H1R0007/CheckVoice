@@ -1,0 +1,130 @@
+/* src/components/ReceiptItemInput.css */
+
+.input-row {
+    display: flex;
+    align-items: stretch;
+    gap: var(--space-2);
+}
+
+.input-title,
+.input-price {
+    height: var(--input-height);
+    border: 2px solid transparent;
+    border-radius: var(--radius-md);
+    background-color: var(--color-bg-inset);
+    color: var(--color-text-primary);
+    outline: none;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
+}
+
+.input-title {
+    flex: 3;
+    min-width: 0;
+    padding: 0 var(--space-5);
+    font-size: var(--font-size-base);
+}
+
+    .input-title::placeholder {
+        color: var(--color-text-placeholder);
+    }
+
+    .input-title:focus-visible {
+        border-color: var(--color-accent);
+        background-color: var(--color-bg-surface);
+        box-shadow: 0 0 0 3px var(--color-accent-soft);
+    }
+
+.input-price {
+    flex: 1;
+    min-width: 80px;
+    max-width: 120px;
+    padding: 0 var(--space-4);
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    text-align: right;
+}
+
+    .input-price::placeholder {
+        color: var(--color-text-placeholder);
+        font-family: var(--font-family-base);
+        font-weight: var(--font-weight-normal);
+    }
+
+    .input-price:focus-visible {
+        border-color: var(--color-accent);
+        background-color: var(--color-bg-surface);
+        box-shadow: 0 0 0 3px var(--color-accent-soft);
+    }
+
+/* ������ ���������� */
+.input-add-btn {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--input-height);
+    height: var(--input-height);
+    border: 2px solid transparent;
+    border-radius: var(--radius-md);
+    background-color: var(--color-bg-inset);
+    color: var(--color-text-placeholder);
+    cursor: not-allowed;
+    transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+
+    .input-add-btn:disabled {
+        background-color: var(--color-bg-inset);
+        color: var(--color-text-placeholder);
+        box-shadow: none;
+    }
+
+    .input-add-btn.active {
+        background-color: var(--color-accent);
+        border-color: var(--color-accent);
+        color: var(--color-text-inverse);
+        cursor: pointer;
+        box-shadow: var(--shadow-sm);
+    }
+
+        .input-add-btn.active:active {
+            transform: scale(0.94);
+            box-shadow: var(--shadow-xs);
+        }
+
+    .input-add-btn:focus-visible {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+    }
+
+@media (hover: hover) and (pointer: fine) {
+    .input-add-btn.active:hover {
+        background-color: var(--color-accent-hover);
+        border-color: var(--color-accent-hover);
+        box-shadow: var(--shadow-md);
+    }
+}
+
+/* ������� */
+@media (max-width: 480px) {
+    .input-row {
+        flex-wrap: wrap;
+    }
+
+    .input-title {
+        flex-basis: 100%;
+    }
+
+    .input-price {
+        flex: 1;
+        max-width: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .input-title,
+    .input-price,
+    .input-add-btn {
+        transition: none !important;
+    }
+}

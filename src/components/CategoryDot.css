@@ -1,0 +1,19 @@
+/* src/components/CategoryDot.css */
+
+.category-dot {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    line-height: 0;
+    transition: transform var(--transition-fast), background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.category-dot-core {
+    width: 42%;
+    height: 42%;
+    border-radius: 999px;
+    transition: background-color var(--transition-fast);
+}

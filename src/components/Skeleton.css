@@ -1,0 +1,115 @@
+/* src/components/Skeleton.css */
+
+.skeleton {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-sm);
+    background-color: var(--color-bg-inset);
+    background-image: linear-gradient( 90deg, var(--color-bg-inset) 0%, var(--color-bg-secondary) 50%, var(--color-bg-inset) 100% );
+    background-size: 200% 100%;
+    background-repeat: no-repeat;
+    animation: cv-skeleton-shimmer 1.4s linear infinite;
+    will-change: background-position;
+    transform: translateZ(0);
+}
+
+@keyframes cv-skeleton-shimmer {
+    0% {
+        background-position: 160% 0;
+    }
+
+    100% {
+        background-position: -40% 0;
+    }
+}
+
+.skeleton-text {
+    display: block;
+    height: 14px;
+    margin-bottom: var(--space-2);
+}
+
+    .skeleton-text:last-child {
+        margin-bottom: 0;
+    }
+
+.skeleton-text--lg {
+    height: 20px;
+}
+
+.skeleton-text--sm {
+    height: 12px;
+}
+
+.skeleton-card {
+    padding: var(--space-4) var(--space-5);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-3);
+}
+
+.skeleton-card-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+}
+
+    .skeleton-card-row:last-child {
+        margin-bottom: 0;
+    }
+
+.skeleton-circle {
+    border-radius: 999px;
+    flex-shrink: 0;
+}
+
+.skeleton-receipt-list {
+    background-color: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-2) 0;
+    overflow: hidden;
+}
+
+.skeleton-receipt-item {
+    padding: var(--space-4) var(--space-5);
+    border-bottom: 1px dashed var(--color-border-dashed);
+}
+
+    .skeleton-receipt-item:last-child {
+        border-bottom: none;
+    }
+
+.skeleton-inline-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.skeleton-inline-group--grow {
+    flex: 1;
+    min-width: 0;
+}
+
+.skeleton-stats-row {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+    .skeleton-stats-row:last-child {
+        border-bottom: none;
+    }
+
+.skeleton-progress {
+    height: 8px;
+    border-radius: 999px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .skeleton {
+        animation: none;
+        background-image: none;
+        background-color: var(--color-bg-secondary);
+    }
+}
