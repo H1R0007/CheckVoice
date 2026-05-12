@@ -1,9 +1,43 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Settings, FileText, FileJson, Download, Trash2, Brain } from 'lucide-react';
+// src/pages/SettingsPage.jsx
+
+import React, { useState } from 'react';
+import { Settings, FileText, FileJson, Download, Trash2, Brain, Tv } from 'lucide-react';
 import StorageIndicator from '../components/StorageIndicator';
 import ConfirmDialog from '../components/ConfirmDialog';
 import ThemeSelector from '../components/ThemeSelector';
 import './SettingsPage.css';
+
+// Определяем тип устройства по User-Agent
+function detectDeviceType() {
+  const ua = navigator.userAgent.toLowerCase();
+  // SmartTV / AndroidTV / Sber устройства
+  if (
+    ua.includes('smarttv') ||
+    ua.includes('smart-tv') ||
+    ua.includes('googletv') ||
+    ua.includes('android tv') ||
+    ua.includes('crkey') ||       // Chromecast
+    ua.includes('netcast') ||     // LG
+    ua.includes('webos') ||       // LG WebOS
+    ua.includes('tizen') ||       // Samsung Smart TV
+    ua.includes('viera') ||       // Panasonic
+    ua.includes('hbbtv') ||       // HbbTV (европейские ТВ)
+    ua.includes('philips') ||
+    ua.includes('roku') ||
+    // Salute устройства (SberBox, SberPortal)
+    ua.includes('sberbox') ||
+    ua.includes('sbertv') ||
+    ua.includes('sberdevice') ||
+    // Очень маленький экран с указателем "TV"
+    (window.screen && window.screen.width >= 1280 && !('ontouchstart' in window) && navigator.maxTouchPoints === 0 && window.devicePixelRatio === 1)
+  ) {
+    return 'tv';
+  }
+  if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+    return 'mobile';
+  }
+  return 'desktop';
+}
 
 export default function SettingsPage({
   storageInfo,
@@ -17,11 +51,14 @@ export default function SettingsPage({
   categoryLearning,
   onResetCategoryLearning,
 }) {
-  const fileInputRef = useRef(null);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
-  const [showImportConfirm, setShowImportConfirm] = useState(false);
   const [showResetLearningConfirm, setShowResetLearningConfirm] = useState(false);
+  const [showImportConfirm, setShowImportConfirm] = useState(false);
   const [importFile, setImportFile] = useState(null);
+  const [fileInputRef] = useState(() => React.createRef());
+
+  const deviceType = detectDeviceType();
+  const isTV = deviceType === 'tv';
 
   const correctionCount = categoryLearning?.stats?.totalCorrections || 0;
   const learnedTitlesCount = Object.keys(categoryLearning?.exactOverrides || {}).length;
@@ -67,9 +104,21 @@ export default function SettingsPage({
       <StorageIndicator storageInfo={storageInfo} />
       <ThemeSelector currentTheme={currentTheme} onChangeTheme={onChangeTheme} />
 
+      {/* --- Экспорт --- */}
       <div className="settings-section">
         <h2 className="settings-section-title">Экспорт данных</h2>
         <p className="settings-section-hint">Последний экспорт: {formatLastExport()}</p>
+
+        {isTV && (
+          <div className="settings-tv-notice">
+            <Tv size={16} strokeWidth={2} className="settings-tv-notice-icon" />
+            <span>
+              Файлы сохраняются в папку «Загрузки» вашего устройства.
+              На телевизорах доступ к файлам может быть ограничен —
+              рекомендуем использовать приложение с телефона или компьютера.
+            </span>
+          </div>
+        )}
 
         <button type="button" className="settings-btn" onClick={onExportCSV}>
           <FileText size={22} strokeWidth={1.8} className="settings-btn-icon" />
@@ -88,30 +137,44 @@ export default function SettingsPage({
         </button>
       </div>
 
+      {/* --- Импорт --- */}
       <div className="settings-section">
         <h2 className="settings-section-title">Импорт данных</h2>
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept=".json"
-          onChange={handleFileSelected}
-          style={{ display: 'none' }}
-        />
 
-        <button
-          type="button"
-          className="settings-btn"
-          onClick={() => fileInputRef.current?.click()}
-          aria-label="Импортировать данные из JSON"
-        >
-          <Download size={22} strokeWidth={1.8} className="settings-btn-icon" />
-          <div className="settings-btn-text">
-            <span className="settings-btn-label">Импорт из JSON</span>
-            <span className="settings-btn-hint">Восстановление из бэкапа</span>
+        {isTV ? (
+          <div className="settings-tv-notice settings-tv-notice--warning">
+            <Tv size={16} strokeWidth={2} className="settings-tv-notice-icon" />
+            <span>
+              Импорт файлов недоступен на телевизорах и приставках —
+              для этой функции используйте телефон или компьютер.
+            </span>
           </div>
-        </button>
+        ) : (
+          <>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".json"
+              onChange={handleFileSelected}
+              style={{ display: 'none' }}
+            />
+            <button
+              type="button"
+              className="settings-btn"
+              onClick={() => fileInputRef.current?.click()}
+              aria-label="Импортировать данные из JSON"
+            >
+              <Download size={22} strokeWidth={1.8} className="settings-btn-icon" />
+              <div className="settings-btn-text">
+                <span className="settings-btn-label">Импорт из JSON</span>
+                <span className="settings-btn-hint">Восстановление из бэкапа</span>
+              </div>
+            </button>
+          </>
+        )}
       </div>
 
+      {/* --- Обучение категорий --- */}
       <div className="settings-section">
         <h2 className="settings-section-title">Персональное обучение категорий</h2>
         <p className="settings-section-hint">
@@ -122,7 +185,6 @@ export default function SettingsPage({
           <div className="settings-learning-icon">
             <Brain size={20} strokeWidth={2} />
           </div>
-
           <div className="settings-learning-content">
             <div className="settings-learning-title">Сохранённые исправления</div>
             <div className="settings-learning-stats">
@@ -146,6 +208,7 @@ export default function SettingsPage({
         </button>
       </div>
 
+      {/* --- Опасная зона --- */}
       <div className="settings-section danger-zone">
         <h2 className="settings-section-title danger-title">Опасная зона</h2>
         <button
@@ -172,10 +235,7 @@ export default function SettingsPage({
           message="Все чеки, история и статистика будут удалены безвозвратно."
           confirmText="Удалить всё"
           danger
-          onConfirm={() => {
-            onClearAllData();
-            setShowClearConfirm(false);
-          }}
+          onConfirm={() => { onClearAllData(); setShowClearConfirm(false); }}
           onCancel={() => setShowClearConfirm(false)}
         />
       )}
@@ -185,10 +245,7 @@ export default function SettingsPage({
           title="Сбросить обучение категорий?"
           message="Все сохранённые исправления категорий будут удалены. Автоматическая категоризация вернётся к базовым правилам."
           confirmText="Сбросить"
-          onConfirm={() => {
-            onResetCategoryLearning();
-            setShowResetLearningConfirm(false);
-          }}
+          onConfirm={() => { onResetCategoryLearning(); setShowResetLearningConfirm(false); }}
           onCancel={() => setShowResetLearningConfirm(false)}
         />
       )}
@@ -198,10 +255,7 @@ export default function SettingsPage({
           fileName={importFile?.name}
           onReplace={() => handleImportConfirm('replace')}
           onMerge={() => handleImportConfirm('merge')}
-          onCancel={() => {
-            setShowImportConfirm(false);
-            setImportFile(null);
-          }}
+          onCancel={() => { setShowImportConfirm(false); setImportFile(null); }}
         />
       )}
     </div>
@@ -209,13 +263,10 @@ export default function SettingsPage({
 }
 
 function ImportDialog({ fileName, onReplace, onMerge, onCancel }) {
-  useEffect(() => {
+  React.useEffect(() => {
     function handleKeyDown(e) {
-      if (e.key === 'Escape') {
-        onCancel();
-      }
+      if (e.key === 'Escape') onCancel();
     }
-
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [onCancel]);
@@ -241,7 +292,6 @@ function ImportDialog({ fileName, onReplace, onMerge, onCancel }) {
             <span className="import-btn-label">Объединить</span>
             <span className="import-btn-hint">Добавить к существующим данным</span>
           </button>
-
           <button type="button" className="import-btn replace-btn" onClick={onReplace}>
             <span className="import-btn-label">Заменить</span>
             <span className="import-btn-hint">Удалить старые, загрузить новые</span>

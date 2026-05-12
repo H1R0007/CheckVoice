@@ -4,19 +4,18 @@
     display: flex;
     flex-direction: column;
     position: relative;
-    height: calc(100vh - var(--nav-height) - var(--assistant-panel-height) - 40px);
-    min-height: 280px;
+    height: calc(100vh - var(--nav-height) - var(--assistant-panel-height) - var(--space-10));
+    min-height: 320px;
     overflow: hidden;
 }
 
 @supports (height: 100dvh) {
     .new-receipt {
-        height: calc(100dvh - var(--nav-height) - var(--assistant-panel-height) - 40px);
+        height: calc(100dvh - var(--nav-height) - var(--assistant-panel-height) - var(--space-10));
     }
 }
 
-/* --- Шапка --- */
-
+/* Шапка */
 .new-receipt .page-header {
     flex-shrink: 0;
     margin-bottom: var(--space-3);
@@ -35,50 +34,57 @@
 
 .receipt-header-actions {
     display: flex;
-    gap: var(--space-3);
+    gap: var(--space-2);
 }
 
 .receipt-action-icon {
-    width: 36px;
-    height: 36px;
+    width: 44px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
     border: none;
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-md);
     background: none;
     color: var(--color-text-tertiary);
     cursor: pointer;
     transition: all var(--transition-fast);
 }
 
-    .receipt-action-icon:hover {
-        background-color: var(--color-bg-inset);
-        color: var(--color-text-secondary);
-    }
+.receipt-action-icon:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+}
+
+.is-tv-device .receipt-action-icon:focus {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+}
+
+.receipt-action-icon:hover {
+    background-color: var(--color-bg-inset);
+    color: var(--color-text-secondary);
+}
 
 .receipt-action-icon--clear {
     color: var(--color-danger);
     background-color: var(--color-danger-soft);
 }
 
-    .receipt-action-icon--clear:hover {
-        background-color: var(--color-danger-medium);
-        color: var(--color-danger);
-    }
+.receipt-action-icon--clear:hover {
+    background-color: var(--color-danger-medium);
+}
 
 .receipt-action-icon--save {
     background-color: var(--color-accent-soft);
     color: var(--color-accent);
 }
 
-    .receipt-action-icon--save:hover {
-        background-color: var(--color-accent-medium);
-        color: var(--color-accent-hover);
-    }
+.receipt-action-icon--save:hover {
+    background-color: var(--color-accent-medium);
+}
 
-/* --- Область прокрутки (основное тело) --- */
-
+/* Область прокрутки */
 .receipt-scroll-area {
     flex: 1 1 0%;
     overflow-y: auto;
@@ -87,49 +93,44 @@
     -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
     padding-bottom: var(--space-2);
+    /* Запас для фокусного кольца */
+    padding-right: 4px;
+    margin-right: -4px;
 }
 
-    .receipt-scroll-area::-webkit-scrollbar {
-        width: 4px;
-    }
+.receipt-scroll-area::-webkit-scrollbar {
+    width: 4px;
+}
 
-    .receipt-scroll-area::-webkit-scrollbar-thumb {
-        background-color: var(--color-border);
-        border-radius: var(--radius-pill);
-    }
+.receipt-scroll-area::-webkit-scrollbar-thumb {
+    background-color: var(--color-border);
+    border-radius: var(--radius-pill);
+}
 
-    .receipt-scroll-area > .empty-state {
-        flex: 1;
-        padding: var(--space-8) var(--space-4);
-    }
-
-/* --- Итоговая сумма --- */
-
+/* Итог */
 .receipt-floating-total {
     flex-shrink: 0;
-    padding: var(--space-4) 0 var(--space-2) 0;
+    padding: var(--space-3) 0 var(--space-2) 0;
 }
 
-/* --- Голосовой индикатор --- */
-
+/* Голосовой индикатор */
 .receipt-voice-area {
     flex-shrink: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: var(--space-4) 0 var(--space-5) 0;
+    padding: var(--space-3) 0 var(--space-4) 0;
     position: relative;
     z-index: 45;
 }
 
-/* --- Кнопка помощи --- */
-
+/* Кнопка помощи */
 .receipt-help-btn {
     position: fixed;
     bottom: calc(var(--assistant-panel-height) + var(--space-6) + 10px);
     right: var(--space-4);
-    width: 40px;
-    height: 40px;
+    width: 48px;
+    height: 48px;
     border-radius: var(--radius-pill);
     background-color: var(--color-bg-surface);
     border: 1px solid var(--color-border);
@@ -143,23 +144,24 @@
     z-index: 50;
 }
 
-    .receipt-help-btn:hover {
-        background-color: var(--color-bg-surface-hover);
-        color: var(--color-accent);
-        border-color: var(--color-accent-soft);
-        box-shadow: var(--shadow-lg);
-    }
-
-.receipt-action-icon:focus-visible,
-.receipt-help-btn:focus-visible {
-    outline: 2px solid var(--color-accent);
-    outline-offset: 2px;
+.receipt-help-btn:hover {
+    background-color: var(--color-bg-surface-hover);
+    color: var(--color-accent);
+    border-color: var(--color-accent-soft);
+    box-shadow: var(--shadow-lg);
 }
 
-/* ============================================
-   Help Dialog
-   ============================================ */
+.receipt-help-btn:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+}
 
+.is-tv-device .receipt-help-btn:focus {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+}
+
+/* Help Dialog */
 .help-overlay {
     position: fixed;
     inset: 0;
@@ -174,14 +176,9 @@
 
 .help-dialog {
     width: 100%;
-    max-width: 480px;
-    /*
-      Оставляем снизу запас под панель ассистента Сбера + немного воздуха.
-      --assistant-panel-height уже учтён в токенах (76px).
-      Добавляем ещё 24px буфера чтобы последняя строка не попадала под блюр.
-    */
-    max-height: calc(100vh - var(--nav-height) - var(--assistant-panel-height) - 48px);
-    max-height: calc(100dvh - var(--nav-height) - var(--assistant-panel-height) - 48px);
+    max-width: 520px;
+    max-height: calc(100vh - var(--nav-height) - var(--assistant-panel-height) - var(--space-12));
+    max-height: calc(100dvh - var(--nav-height) - var(--assistant-panel-height) - var(--space-12));
     display: flex;
     flex-direction: column;
     background-color: var(--color-bg-elevated);
@@ -202,7 +199,7 @@
 }
 
 .help-dialog-title {
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-xl);
     font-weight: var(--font-weight-bold);
     color: var(--color-text-primary);
 }
@@ -211,50 +208,50 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 40px;
+    height: 40px;
     border: none;
     border-radius: var(--radius-sm);
     background: none;
     color: var(--color-text-tertiary);
     cursor: pointer;
-    transition: background-color var(--transition-fast), color var(--transition-fast);
+    transition:
+        background-color var(--transition-fast),
+        color var(--transition-fast);
     flex-shrink: 0;
 }
 
-    .help-dialog-close:hover {
-        background-color: var(--color-bg-inset);
-        color: var(--color-text-primary);
-    }
+.help-dialog-close:hover {
+    background-color: var(--color-bg-inset);
+    color: var(--color-text-primary);
+}
 
-    .help-dialog-close:focus-visible {
-        outline: 2px solid var(--color-accent);
-        outline-offset: 2px;
-    }
+.help-dialog-close:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+}
 
 .help-dialog-body {
     flex: 1;
     overflow-y: auto;
-    padding: var(--space-5) var(--space-6);
-    /* Дополнительный отступ снизу чтобы последняя строка не обрезалась */
-    padding-bottom: var(--space-7);
+    padding: var(--space-5) var(--space-6) var(--space-8);
     display: flex;
     flex-direction: column;
-    gap: var(--space-5);
+    gap: var(--space-6);
     -webkit-overflow-scrolling: touch;
 }
 
-    .help-dialog-body::-webkit-scrollbar {
-        width: 4px;
-    }
+.help-dialog-body::-webkit-scrollbar {
+    width: 4px;
+}
 
-    .help-dialog-body::-webkit-scrollbar-thumb {
-        background-color: var(--color-border);
-        border-radius: var(--radius-pill);
-    }
+.help-dialog-body::-webkit-scrollbar-thumb {
+    background-color: var(--color-border);
+    border-radius: var(--radius-pill);
+}
 
 .help-dialog-intro {
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-base);
     color: var(--color-text-secondary);
     line-height: var(--line-height-relaxed);
     margin: 0;
@@ -263,11 +260,11 @@
 .help-section {
     display: flex;
     flex-direction: column;
-    gap: var(--space-2);
+    gap: var(--space-3);
 }
 
 .help-section-title {
-    font-size: var(--font-size-xs);
+    font-size: var(--font-size-sm);
     font-weight: var(--font-weight-bold);
     text-transform: uppercase;
     letter-spacing: var(--letter-spacing-caps);
@@ -277,7 +274,7 @@
 .help-section-list {
     display: flex;
     flex-direction: column;
-    gap: var(--space-2);
+    gap: var(--space-3);
     list-style: none;
     padding: 0;
     margin: 0;
@@ -293,28 +290,27 @@
 .help-example {
     font-family: var(--font-family-mono);
     font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-semibold);
+    font-weight: var(--font-weight-bold);
     color: var(--color-text-primary);
     background-color: var(--color-accent-soft);
-    padding: 2px var(--space-2);
+    padding: var(--space-1) var(--space-2);
     border-radius: var(--radius-xs);
     white-space: nowrap;
 }
 
 .help-desc {
-    font-size: var(--font-size-xs);
+    font-size: var(--font-size-sm);
     color: var(--color-text-tertiary);
-    line-height: 1.4;
+    line-height: 1.5;
 }
 
 .help-dialog-tip {
-    padding: var(--space-4);
+    padding: var(--space-4) var(--space-5);
     border-radius: var(--radius-md);
     background-color: var(--color-bg-inset);
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-base);
     color: var(--color-text-secondary);
     line-height: var(--line-height-relaxed);
-    /* Гарантируем что подсказка не обрезается на маленьких экранах */
     flex-shrink: 0;
 }
 
@@ -324,7 +320,7 @@
     }
 
     .help-dialog-body {
-        padding: var(--space-4) var(--space-5) var(--space-7) var(--space-5);
+        padding: var(--space-4) var(--space-5) var(--space-8);
     }
 }
 

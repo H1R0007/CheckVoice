@@ -13,19 +13,14 @@
 }
 
 @keyframes cv-confirm-overlay-in {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
+    from { opacity: 0; }
+    to   { opacity: 1; }
 }
 
 .confirm-dialog {
     width: 100%;
-    max-width: 380px;
-    padding: var(--space-7);
+    max-width: 420px;
+    padding: var(--space-7) var(--space-8);
     background-color: var(--color-bg-elevated);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-xl);
@@ -38,7 +33,6 @@
         opacity: 0;
         transform: translateY(10px) scale(0.98);
     }
-
     to {
         opacity: 1;
         transform: translateY(0) scale(1);
@@ -47,15 +41,15 @@
 
 .confirm-title {
     margin-bottom: var(--space-3);
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-xl);
     font-weight: var(--font-weight-bold);
     line-height: 1.25;
     color: var(--color-text-primary);
 }
 
 .confirm-message {
-    margin-bottom: var(--space-6);
-    font-size: var(--font-size-sm);
+    margin-bottom: var(--space-7);
+    font-size: var(--font-size-base);
     line-height: var(--line-height-relaxed);
     color: var(--color-text-secondary);
 }
@@ -69,48 +63,59 @@
     flex: 1;
     border: none;
     border-radius: var(--radius-md);
-    padding: var(--space-3) var(--space-4);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-semibold);
+    padding: var(--space-4) var(--space-5);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-bold);
     cursor: pointer;
-    transition: background-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+    transition:
+        background-color var(--transition-fast),
+        color var(--transition-fast),
+        transform var(--transition-fast),
+        box-shadow var(--transition-fast);
+    min-height: var(--btn-height);
 }
 
-    .confirm-btn:active {
-        transform: scale(0.97);
-    }
+.confirm-btn:active {
+    transform: scale(0.97);
+}
 
-    .confirm-btn:focus-visible {
-        outline: 2px solid var(--color-accent);
-        outline-offset: 2px;
-    }
+.confirm-btn:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+}
 
-    .confirm-btn.cancel {
-        background-color: var(--color-bg-inset);
-        color: var(--color-text-secondary);
-    }
+.is-tv-device .confirm-btn:focus {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+}
 
-        .confirm-btn.cancel:hover {
-            background-color: var(--color-border);
-            color: var(--color-text-primary);
-        }
+.confirm-btn.cancel {
+    background-color: var(--color-bg-inset);
+    color: var(--color-text-secondary);
+    border: 1px solid var(--color-border);
+}
 
-    .confirm-btn.confirm {
-        background-color: var(--color-accent);
-        color: var(--color-text-inverse);
-    }
+.confirm-btn.cancel:hover {
+    background-color: var(--color-border);
+    color: var(--color-text-primary);
+}
 
-        .confirm-btn.confirm:hover {
-            background-color: var(--color-accent-hover);
-        }
+.confirm-btn.confirm {
+    background-color: var(--color-accent);
+    color: var(--color-text-inverse);
+}
 
-        .confirm-btn.confirm.danger {
-            background-color: var(--color-danger);
-        }
+.confirm-btn.confirm:hover {
+    background-color: var(--color-accent-hover);
+}
 
-            .confirm-btn.confirm.danger:hover {
-                background-color: var(--color-danger-hover);
-            }
+.confirm-btn.confirm.danger {
+    background-color: var(--color-danger);
+}
+
+.confirm-btn.confirm.danger:hover {
+    background-color: var(--color-danger-hover);
+}
 
 @media (prefers-reduced-motion: reduce) {
     .confirm-overlay,

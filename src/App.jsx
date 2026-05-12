@@ -4,19 +4,16 @@ import React from 'react';
 import { createAssistant, createSmartappDebugger } from '@salutejs/client';
 import './App.css';
 
-// Pages
 import NewReceipt from './pages/NewReceipt';
 import ReceiptHistory from './pages/ReceiptHistory';
 import ReceiptDetails from './pages/ReceiptDetails';
 import Statistics from './pages/Statistics';
 import SettingsPage from './pages/SettingsPage';
 
-// Components
 import NavigationBar from './components/NavigationBar';
 import Notification from './components/Notification';
 import CategoryDebugPanel from './components/CategoryDebugPanel';
 
-// Utils
 import { parseVoiceInput, extractPriceOnly, isCancelPhrase } from './utils/parseVoiceInput';
 import {
   resolveItemCategory,
@@ -144,6 +141,8 @@ export class App extends React.Component {
     };
 
     this.applyTheme(this.state.currentTheme);
+    // Определяем тип устройства и ставим класс на <html>
+    this.applyDeviceClass();
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -226,10 +225,7 @@ export class App extends React.Component {
     const now = Date.now();
     const actionKey = action.type + '|' + (action.text || action.id || '');
 
-    if (
-      now - this._lastActionTime < 400 &&
-      actionKey === this._lastActionType
-    ) {
+    if (now - this._lastActionTime < 400 && actionKey === this._lastActionType) {
       return;
     }
 
@@ -237,40 +233,24 @@ export class App extends React.Component {
     this._lastActionType = actionKey;
 
     switch (action.type) {
-      case 'add_item':
-        return this.handleAddItem(action);
-      case 'delete_item':
-        return this.handleDeleteItem(action);
-      case 'clear_receipt':
-        return this.handleClearReceipt();
-      case 'save_receipt':
-        return this.handleSaveReceipt();
-      case 'navigate':
-        return this.handleNavigate(action);
-      case 'ask_total':
-        return this.handleAskTotal();
-      case 'ask_category':
-        return this.handleAskCategory(action);
-      case 'edit_price':
-        return this.handleEditPrice(action);
-      case 'read_receipt':
-        return this.handleReadReceipt();
-      case 'edit_price_by_name':
-        return this.handleEditPriceByName(action);
-      case 'open_last_receipt':
-        return this.handleOpenLastReceipt();
-      case 'edit_last_receipt':
-        return this.handleEditLastReceipt();
-      case 'delete_last_receipt':
-        return this.handleDeleteLastReceipt();
-      case 'export_data':
-        return this.handleVoiceExport();
-      case 'cancel_pending':
-        return this.handleCancelPending();
-      case 'undo_last_item':
-        return this.handleUndoLastItem();
-      case 'show_help':
-        return this.handleShowHelp();
+      case 'add_item':         return this.handleAddItem(action);
+      case 'delete_item':      return this.handleDeleteItem(action);
+      case 'clear_receipt':    return this.handleClearReceipt();
+      case 'save_receipt':     return this.handleSaveReceipt();
+      case 'navigate':         return this.handleNavigate(action);
+      case 'ask_total':        return this.handleAskTotal();
+      case 'ask_category':     return this.handleAskCategory(action);
+      case 'ask_period_total': return this.handleAskPeriodTotal(action);
+      case 'edit_price':       return this.handleEditPrice(action);
+      case 'read_receipt':     return this.handleReadReceipt();
+      case 'edit_price_by_name': return this.handleEditPriceByName(action);
+      case 'open_last_receipt':  return this.handleOpenLastReceipt();
+      case 'edit_last_receipt':  return this.handleEditLastReceipt();
+      case 'delete_last_receipt': return this.handleDeleteLastReceipt();
+      case 'export_data':      return this.handleVoiceExport();
+      case 'cancel_pending':   return this.handleCancelPending();
+      case 'undo_last_item':   return this.handleUndoLastItem();
+      case 'show_help':        return this.handleShowHelp();
       default:
         console.warn('Unknown action type:', action.type);
     }
@@ -280,7 +260,7 @@ export class App extends React.Component {
     const rawText = action.text || '';
     if (isCancelPhrase(rawText)) {
       this.handleCancelPending();
-    return;
+      return;
     }
 
     this.showVoiceStatus('processing', rawText);
@@ -304,12 +284,12 @@ export class App extends React.Component {
           this.setState({ pendingItem: null });
           this.addItemToReceipt(parsed.title, parsed.price);
           this.showVoiceStatus('success', parsed.title + ' — ' + parsed.price + ' ₽');
-          this.speak('Записала ' + parsed.title + ' за ' + parsed.price + '.');
+          this.speak('Записал ' + parsed.title + ' за ' + parsed.price + '.');
           return;
         }
 
         this.showVoiceStatus('error', 'Назовите цену');
-        this.speak('Не расслышала цену. Сколько стоит ' + pending.title + '?');
+        this.speak('Не расслышал цену. Сколько стоит ' + pending.title + '?');
         return;
       }
 
@@ -318,12 +298,12 @@ export class App extends React.Component {
           this.addItemToReceipt(parsed.title, pending.price);
           this.setState({ pendingItem: null });
           this.showVoiceStatus('success', parsed.title + ' — ' + pending.price + ' ₽');
-          this.speak(parsed.title + ' за ' + pending.price + '. Записала!');
+          this.speak(parsed.title + ' за ' + pending.price + '. Записал!');
           return;
         }
 
         this.showVoiceStatus('error', 'Назовите товар');
-        this.speak('Не поняла название. Что стоит ' + pending.price + ' рублей?');
+        this.speak('Не понял название. Что стоит ' + pending.price + ' рублей?');
         return;
       }
     }
@@ -334,7 +314,7 @@ export class App extends React.Component {
       this.showVoiceStatus('success', parsed.title + ' — ' + parsed.price + ' ₽');
       const responses = [
         parsed.title + ', ' + parsed.price + '. Есть!',
-        'Записала ' + parsed.title + ' за ' + parsed.price + '.',
+        'Записал ' + parsed.title + ' за ' + parsed.price + '.',
         parsed.title + ' — ' + parsed.price + '. Готово!',
       ];
       this.speak(responses[Math.floor(Math.random() * responses.length)]);
@@ -351,7 +331,7 @@ export class App extends React.Component {
     } else {
       this.showVoiceStatus('error', 'Не удалось распознать');
       this.showNotification('error', 'Скажите товар и цену');
-      this.speak('Не расслышала. Попробуйте так: молоко 89 рублей.');
+      this.speak('Не расслышал. Попробуйте так: молоко 89 рублей.');
     }
   }
 
@@ -359,9 +339,7 @@ export class App extends React.Component {
     if (!text) return null;
 
     const parsedPrice = extractPriceOnly(text);
-    if (parsedPrice !== null && parsedPrice !== undefined) {
-      return parsedPrice;
-    }
+    if (parsedPrice !== null && parsedPrice !== undefined) return parsedPrice;
 
     const cleaned = text.trim().toLowerCase()
       .replace(/рублей|рубля|рубль|руб/gi, '')
@@ -397,9 +375,9 @@ export class App extends React.Component {
 
     if (!itemToDelete && action.id) {
       const searchText = action.id.toLowerCase().trim();
-      itemToDelete = items.find(item => item.title.toLowerCase() === searchText);
-      if (!itemToDelete) itemToDelete = items.find(item => item.title.toLowerCase().includes(searchText));
-      if (!itemToDelete) itemToDelete = items.find(item => searchText.includes(item.title.toLowerCase()));
+      itemToDelete = items.find(item => item.title.toLowerCase() === searchText)
+        || items.find(item => item.title.toLowerCase().includes(searchText))
+        || items.find(item => searchText.includes(item.title.toLowerCase()));
     }
 
     if (!itemToDelete && action.id) {
@@ -412,7 +390,7 @@ export class App extends React.Component {
     if (!itemToDelete) {
       this.showNotification('error', 'Товар не найден');
       this.showVoiceStatus('error', 'Не найден');
-      this.speak('Не нашла такой товар в чеке. Попробуйте сказать точное название.');
+      this.speak('Не нашёл такой товар в чеке. Попробуйте сказать точное название.');
       return;
     }
 
@@ -420,7 +398,7 @@ export class App extends React.Component {
     this.setState(newState);
     this.showNotification('success', 'Удалено: ' + itemToDelete.title);
     this.showVoiceStatus('success', 'Удалено');
-    this.speak('Убрала ' + itemToDelete.title + ' из чека.');
+    this.speak('Убрал ' + itemToDelete.title + ' из чека.');
   }
 
   parseOrdinal(text) {
@@ -502,32 +480,32 @@ export class App extends React.Component {
   }
 
   handleCancelPending() {
-  if (this.state.pendingItem) {
-    this.setState({ pendingItem: null });
-    this.showVoiceStatus('idle');
-    this.speak('Отменила. Что записать?');
-    this.showNotification('success', 'Ввод отменён');
-  } else {
-    this.speak('Нечего отменять.');
-  }
-}
-
-handleUndoLastItem() {
-  const items = this.state.currentReceipt.items;
-
-  if (items.length === 0) {
-    this.speak('Чек пустой, нечего отменять.');
-    return;
+    if (this.state.pendingItem) {
+      this.setState({ pendingItem: null });
+      this.showVoiceStatus('idle');
+      this.speak('Отменил. Что записать?');
+      this.showNotification('success', 'Ввод отменён');
+    } else {
+      this.speak('Нечего отменять.');
+    }
   }
 
-  const lastItem = items[items.length - 1];
-  const newState = removeItemFromCurrentReceipt(this.state, lastItem.id);
-  this.setState(newState);
+  handleUndoLastItem() {
+    const items = this.state.currentReceipt.items;
 
-  this.showNotification('success', 'Удалено: ' + lastItem.title);
-  this.showVoiceStatus('success', 'Отменено');
-  this.speak('Убрала ' + lastItem.title + ' из чека.');
-}
+    if (items.length === 0) {
+      this.speak('Чек пустой, нечего отменять.');
+      return;
+    }
+
+    const lastItem = items[items.length - 1];
+    const newState = removeItemFromCurrentReceipt(this.state, lastItem.id);
+    this.setState(newState);
+
+    this.showNotification('success', 'Удалено: ' + lastItem.title);
+    this.showVoiceStatus('success', 'Отменено');
+    this.speak('Убрал ' + lastItem.title + ' из чека.');
+  }
 
   handleNavigate(action) {
     if (!action.screen) return;
@@ -559,7 +537,7 @@ handleUndoLastItem() {
         this.speakStatistics();
         break;
       case 'settings':
-        this.speak('Настройки. Здесь можно экспортировать или импортировать данные.');
+        this.speak('Настройки. Здесь можно экспортировать данные.');
         break;
       default:
         break;
@@ -582,33 +560,75 @@ handleUndoLastItem() {
     this.showNotification('success', 'Итого: ' + totalRounded + ' ₽');
   }
 
+  /**
+   * Запрос общей суммы за период из ИСТОРИИ (не текущий чек)
+   */
+  handleAskPeriodTotal(action) {
+    const period = action.period || 'all';
+    const periodReceipts = getReceiptsByPeriod({ savedReceipts: this.state.savedReceipts }, period);
+
+    const periodLabels = {
+      week: 'за неделю',
+      month: 'за месяц',
+      all: 'за всё время',
+    };
+
+    const label = periodLabels[period] || 'за всё время';
+
+    if (periodReceipts.length === 0) {
+      this.speak('За этот период покупок не найдено.');
+      return;
+    }
+
+    const total = periodReceipts.reduce((s, r) => s + r.total, 0);
+    const totalRounded = Math.round(total * 100) / 100;
+    const count = periodReceipts.length;
+
+    this.speak(
+      label.charAt(0).toUpperCase() + label.slice(1) +
+      ' потрачено ' + totalRounded + ' рублей, ' + count + ' чеков.'
+    );
+    this.showNotification('success', label + ': ' + totalRounded + ' ₽');
+  }
+
   handleAskCategory(action) {
     const categoryKey = resolveCategoryFromVoice(action.categoryText);
 
     if (!categoryKey) {
-      this.speak('Не нашла такую категорию. Попробуйте сказать по-другому.');
+      this.speak('Не нашёл такую категорию. Попробуйте сказать по-другому.');
       this.showNotification('warning', 'Категория не найдена');
       return;
     }
 
     const categoryInfo = CATEGORIES.find(c => c.key === categoryKey);
-    const { total, count } = getCategoryTotal(this.state.savedReceipts, categoryKey);
     const name = categoryInfo ? categoryInfo.name : action.categoryText;
+    const period = action.period || 'all';
+
+    // Данные берём из СТАТИСТИКИ (сохранённые чеки), не из текущего
+    const periodReceipts = getReceiptsByPeriod({ savedReceipts: this.state.savedReceipts }, period);
+    const { total, count } = getCategoryTotal(periodReceipts, categoryKey);
+
+    const periodLabels = {
+      week: ' за неделю',
+      month: ' за месяц',
+      all: '',
+    };
+    const periodLabel = periodLabels[period] || '';
 
     if (count === 0) {
-      this.speak('На ' + name + ' пока ничего не потрачено.');
+      this.speak('На ' + name + periodLabel + ' пока ничего не потрачено.');
     } else if (count === 1) {
-      this.speak('На ' + name + ' была одна покупка на ' + total + ' рублей.');
+      this.speak('На ' + name + periodLabel + ' была одна покупка на ' + total + ' рублей.');
     } else {
-      this.speak('На ' + name + ' потрачено ' + total + ' рублей, ' + count + ' покупок.');
+      this.speak('На ' + name + periodLabel + ' потрачено ' + total + ' рублей, ' + count + ' покупок.');
     }
 
-    this.showNotification('success', name + ': ' + total + ' ₽');
+    this.showNotification('success', name + periodLabel + ': ' + total + ' ₽');
   }
 
   handleEditPrice(action) {
     if (!action.id || action.newPrice === null || action.newPrice === undefined) {
-      this.speak('Не поняла, какую цену поменять.');
+      this.speak('Не понял, какую цену поменять.');
       return;
     }
 
@@ -619,7 +639,7 @@ handleUndoLastItem() {
     const name = item ? item.title : 'Товар';
     this.showNotification('success', name + ': ' + action.newPrice + ' ₽');
     this.showVoiceStatus('success', 'Цена изменена');
-    this.speak('Поменяла цену ' + name + ' на ' + action.newPrice + ' рублей.');
+    this.speak('Поменял цену ' + name + ' на ' + action.newPrice + ' рублей.');
   }
 
   handleReadReceipt() {
@@ -639,7 +659,7 @@ handleUndoLastItem() {
       speech = 'В чеке один товар: ' + items[0].title + ', ' + items[0].price + ' рублей.';
     } else {
       speech = 'В чеке ' + items.length + ' позиций: ';
-      items.forEach(function(item, index) {
+      items.forEach(function (item, index) {
         speech += item.title + ' — ' + item.price;
         if (index < items.length - 1) speech += ', ';
       });
@@ -652,7 +672,7 @@ handleUndoLastItem() {
   handleEditPriceByName(action) {
     const text = (action.text || '').toLowerCase().trim();
     if (!text) {
-      this.speak('Не поняла, что изменить.');
+      this.speak('Не понял, что изменить.');
       return;
     }
 
@@ -666,7 +686,7 @@ handleUndoLastItem() {
     }
 
     if (newPrice === null) {
-      this.speak('Не расслышала новую цену. Скажите, например: измени цену молока на 95.');
+      this.speak('Не расслышал новую цену. Скажите, например: измени цену молока на 95.');
       return;
     }
 
@@ -674,9 +694,9 @@ handleUndoLastItem() {
 
     if (itemName) {
       const search = itemName.toLowerCase();
-      itemToEdit = items.find(i => i.title.toLowerCase() === search);
-      if (!itemToEdit) itemToEdit = items.find(i => i.title.toLowerCase().includes(search));
-      if (!itemToEdit) itemToEdit = items.find(i => search.includes(i.title.toLowerCase()));
+      itemToEdit = items.find(i => i.title.toLowerCase() === search)
+        || items.find(i => i.title.toLowerCase().includes(search))
+        || items.find(i => search.includes(i.title.toLowerCase()));
     }
 
     if (!itemToEdit) {
@@ -687,13 +707,13 @@ handleUndoLastItem() {
 
       if (wordsInText) {
         const searchAlt = wordsInText.toLowerCase();
-        itemToEdit = items.find(i => i.title.toLowerCase().includes(searchAlt));
-        if (!itemToEdit) itemToEdit = items.find(i => searchAlt.includes(i.title.toLowerCase()));
+        itemToEdit = items.find(i => i.title.toLowerCase().includes(searchAlt))
+          || items.find(i => searchAlt.includes(i.title.toLowerCase()));
       }
     }
 
     if (!itemToEdit) {
-      this.speak('Не нашла такой товар в чеке.');
+      this.speak('Не нашёл такой товар в чеке.');
       this.showVoiceStatus('error', 'Товар не найден');
       return;
     }
@@ -704,7 +724,7 @@ handleUndoLastItem() {
 
     this.showNotification('success', itemToEdit.title + ': ' + oldPrice + ' → ' + newPrice + ' ₽');
     this.showVoiceStatus('success', 'Цена изменена');
-    this.speak('Поменяла цену ' + itemToEdit.title + ' с ' + oldPrice + ' на ' + newPrice + ' рублей.');
+    this.speak('Поменял цену ' + itemToEdit.title + ' с ' + oldPrice + ' на ' + newPrice + ' рублей.');
   }
 
   handleOpenLastReceipt() {
@@ -715,14 +735,10 @@ handleUndoLastItem() {
     }
 
     const last = receipts[0];
-    this.setState({
-      currentScreen: 'details',
-      selectedReceiptId: last.id,
-    });
+    this.setState({ currentScreen: 'details', selectedReceiptId: last.id });
 
     const dateStr = new Date(last.date + 'T00:00:00').toLocaleDateString('ru-RU', {
-      day: 'numeric',
-      month: 'long',
+      day: 'numeric', month: 'long',
     });
 
     this.speak('Чек от ' + dateStr + '. ' + last.items.length + ' позиций на ' + last.total + ' рублей.');
@@ -734,9 +750,7 @@ handleUndoLastItem() {
       this.speak('В истории нет чеков для редактирования.');
       return;
     }
-
-    const last = receipts[0];
-    this.handleEditReceipt(last.id);
+    this.handleEditReceipt(receipts[0].id);
   }
 
   handleDeleteLastReceipt() {
@@ -770,23 +784,17 @@ handleUndoLastItem() {
     const receipts = this.state.savedReceipts;
 
     if (receipts.length === 0) {
-      this.speak('Статистики пока нет. Сохраните первый чек, и я начну считать.');
+      this.speak('Статистики пока нет. Сохраните первый чек, и начнём считать.');
       return;
     }
 
     const period = this.state.selectedPeriod;
-    const stateForPeriod = { savedReceipts: receipts };
-    const periodReceipts = getReceiptsByPeriod(stateForPeriod, period);
-
+    const periodReceipts = getReceiptsByPeriod({ savedReceipts: receipts }, period);
     const totalAmount = periodReceipts.reduce((s, r) => s + r.total, 0);
     const totalRounded = Math.round(totalAmount);
     const totalReceipts = periodReceipts.length;
 
-    const periodLabels = {
-      week: 'за неделю',
-      month: 'за месяц',
-      all: 'за всё время',
-    };
+    const periodLabels = { week: 'за неделю', month: 'за месяц', all: 'за всё время' };
 
     if (totalReceipts === 0) {
       this.speak('За этот период покупок не было.');
@@ -801,8 +809,8 @@ handleUndoLastItem() {
 
     if (top3.length > 0) {
       speech += 'Больше всего ушло на ';
-      top3.forEach(function(cat, i) {
-        const catInfo = CATEGORIES.find(function(c) { return c.key === cat.key; });
+      top3.forEach(function (cat, i) {
+        const catInfo = CATEGORIES.find(c => c.key === cat.key);
         const name = catInfo ? catInfo.name : 'другое';
         speech += name + ' — ' + Math.round(cat.total);
         if (i < top3.length - 2) speech += ', ';
@@ -833,9 +841,7 @@ handleUndoLastItem() {
     localStorage.setItem('cv-theme', theme);
   };
 
-  handleAddItemManual = (title, price) => {
-    this.addItemToReceipt(title, price);
-  };
+  handleAddItemManual = (title, price) => { this.addItemToReceipt(title, price); };
 
   handleDeleteItemManual = (itemId) => {
     const newState = removeItemFromCurrentReceipt(this.state, itemId);
@@ -852,13 +858,10 @@ handleUndoLastItem() {
     if (!item) return;
 
     let nextState = editItemCategory(this.state, itemId, newCategory);
-
     nextState = {
       ...nextState,
       categoryLearning: applyCategoryCorrectionToLearning(
-        nextState.categoryLearning,
-        item,
-        newCategory
+        nextState.categoryLearning, item, newCategory
       ),
     };
 
@@ -881,9 +884,7 @@ handleUndoLastItem() {
   };
 
   handleResetCategoryLearning = () => {
-    this.setState({
-      categoryLearning: getEmptyCategoryLearning(),
-    });
+    this.setState({ categoryLearning: getEmptyCategoryLearning() });
     this.showNotification('success', 'Обучение категорий сброшено');
   };
 
@@ -904,15 +905,10 @@ handleUndoLastItem() {
   };
 
   handleNavigateManual = (screen, receiptId = null) => {
-    this.setState({
-      currentScreen: screen,
-      selectedReceiptId: receiptId,
-    });
+    this.setState({ currentScreen: screen, selectedReceiptId: receiptId });
   };
 
-  handleChangePeriod = (period) => {
-    this.setState({ selectedPeriod: period });
-  };
+  handleChangePeriod = (period) => { this.setState({ selectedPeriod: period }); };
 
   handleExportJSON = () => {
     const result = exportToJSON(this.state);
@@ -952,7 +948,6 @@ handleUndoLastItem() {
   };
 
   handleClearAllData = () => {
-  // ConfirmDialog уже показан в SettingsPage — просто выполняем очистку
     this.setState({
       currentReceipt: { items: [] },
       savedReceipts: [],
@@ -963,28 +958,27 @@ handleUndoLastItem() {
   };
 
   handleEditReceipt = (receiptId) => {
-  const receipt = this.state.savedReceipts.find((r) => r.id === receiptId);
-  if (!receipt) return;
+    const receipt = this.state.savedReceipts.find((r) => r.id === receiptId);
+    if (!receipt) return;
 
-  // Сохраняем оригинальную дату и id чтобы вернуть его на место
-  const newState = {
-    ...this.state,
-    currentReceipt: {
-      items: [...receipt.items],
-      // Запоминаем мета-данные оригинала
-      _editingReceiptId: receipt.id,
-      _editingReceiptDate: receipt.date,
-      _editingReceiptCreatedAt: receipt.createdAt,
-    },
-    savedReceipts: this.state.savedReceipts.filter((r) => r.id !== receiptId),
-    currentScreen: 'newReceipt',
-    selectedReceiptId: null,
+    const newState = {
+      ...this.state,
+      currentReceipt: {
+        items: [...receipt.items],
+        _editingReceiptId: receipt.id,
+        _editingReceiptDate: receipt.date,
+        _editingReceiptCreatedAt: receipt.createdAt,
+      },
+      savedReceipts: this.state.savedReceipts.filter((r) => r.id !== receiptId),
+      currentScreen: 'newReceipt',
+      selectedReceiptId: null,
+    };
+
+    this.setState(newState);
+    this.showNotification('success', 'Чек загружен для редактирования');
+    this.speak('Загрузил чек. Можете редактировать.');
   };
 
-  this.setState(newState);
-  this.showNotification('success', 'Чек загружен для редактирования');
-  this.speak('Загрузила чек. Можете редактировать.');
-};
   handleSaveAnimationComplete = () => {
     const { state: newState, receipt } = saveCurrentReceipt(this.state);
 
@@ -1000,13 +994,8 @@ handleUndoLastItem() {
   };
 
   showNotification(type, message) {
-    this.setState({
-      notification: { type, message },
-    });
-
-    setTimeout(() => {
-      this.setState({ notification: null });
-    }, 3000);
+    this.setState({ notification: { type, message } });
+    setTimeout(() => { this.setState({ notification: null }); }, 3000);
   }
 
   showVoiceStatus(status, text = '') {
@@ -1030,11 +1019,9 @@ handleUndoLastItem() {
           },
         },
         (data) => {
-          if (data?.error) {
-            console.warn('speak: sendData error', data.error);
-          }
+          if (data?.error) console.warn('speak: sendData error', data.error);
         }
-     );
+      );
     } catch (e) {
       console.warn('speak error:', e);
     }
@@ -1042,14 +1029,9 @@ handleUndoLastItem() {
 
   render() {
     const {
-      currentScreen,
-      currentReceipt,
-      savedReceipts,
-      selectedReceiptId,
-      selectedPeriod,
-      notification,
-      storageInfo,
-      categoryLearning,
+      currentScreen, currentReceipt, savedReceipts,
+      selectedReceiptId, selectedPeriod, notification,
+      storageInfo, categoryLearning,
     } = this.state;
 
     const isDev = process.env.NODE_ENV === 'development';
@@ -1141,5 +1123,36 @@ handleUndoLastItem() {
         </main>
       </div>
     );
+  }
+  applyDeviceClass() {
+    const ua = navigator.userAgent.toLowerCase();
+    const isTV =
+      ua.includes('smarttv') ||
+      ua.includes('smart-tv') ||
+      ua.includes('googletv') ||
+      ua.includes('android tv') ||
+      ua.includes('webos') ||
+      ua.includes('tizen') ||
+      ua.includes('hbbtv') ||
+      ua.includes('sberbox') ||
+      ua.includes('sbertv') ||
+      ua.includes('sberdevice') ||
+      ua.includes('netcast') ||
+      ua.includes('viera') ||
+      ua.includes('philips') ||
+      ua.includes('roku') ||
+      (
+        window.screen &&
+        window.screen.width >= 1280 &&
+        !('ontouchstart' in window) &&
+        navigator.maxTouchPoints === 0 &&
+        window.devicePixelRatio === 1
+      );
+
+    if (isTV) {
+      document.documentElement.classList.add('is-tv-device');
+    } else {
+      document.documentElement.classList.remove('is-tv-device');
+    }
   }
 }

@@ -1,171 +1,293 @@
 /* src/styles/tokens.css */
 /* ============================================
-   CheckVoice — Дизайн-токены
-   Палитра: «Тёплый пергамент» (Warm Receipt)
+   CheckVoice вЂ” Р”РёР·Р°Р№РЅ-С‚РѕРєРµРЅС‹
+   РђРґР°РїС‚РёРІРЅР°СЏ СЃРёСЃС‚РµРјР°: С‚РµР»РµС„РѕРЅ / РїР»Р°РЅС€РµС‚ / РўР’
    ============================================ */
 
 :root {
     /* ----------------------------------------
-     ЦВЕТА: Основа
+     Р¦РІРµС‚Р°: РЎРІРµС‚Р»Р°СЏ С‚РµРјР° (Warm Receipt)
      ---------------------------------------- */
-    /* Фоны */
-    --color-bg-primary: #FAF7F2; /* Основной фон — тёплый кремовый */
-    --color-bg-secondary: #F3EDE4; /* Вторичный фон — чуть темнее */
-    --color-bg-surface: #FFFFFF; /* Поверхность карточек */
-    --color-bg-surface-hover: #F9F6F1; /* Карточка при hover */
-    --color-bg-elevated: #FFFFFF; /* Приподнятый элемент (диалоги, nav) */
-    --color-bg-inset: #F0EBE3; /* Вдавленный элемент (инпуты, селекторы) */
-    /* Текст */
-    --color-text-primary: #2C2520; /* Основной текст — тёплый чёрный */
-    --color-text-secondary: #78706A; /* Вторичный текст */
-    --color-text-tertiary: #A49E98; /* Третичный (подсказки, даты) */
-    --color-text-placeholder: #C4BEB8; /* Placeholder в инпутах */
-    --color-text-inverse: #FFFFFF; /* Текст на тёмном/цветном фоне */
-    /* Акцент — Сбер-зелёный (основной) */
-    --color-accent: #21A038; /* Основной акцент — сберовский зелёный */
-    --color-accent-hover: #1B8A2F; /* Hover */
-    --color-accent-active: #167826; /* Active/Pressed */
-    --color-accent-soft: rgba(33, 160, 56, 0.10); /* Мягкий фон */
-    --color-accent-medium: rgba(33, 160, 56, 0.18); /* Средний фон */
-    /* Вторичный акцент — тёплый янтарный */
-    --color-secondary: #D4862A; /* Янтарный для вторичных действий */
-    --color-secondary-soft: rgba(212, 134, 42, 0.10);
-    --color-secondary-medium: rgba(212, 134, 42, 0.18);
-    /* Деструктивный */
-    --color-danger: #C0392B; /* Удаление, ошибки */
-    --color-danger-hover: #A93226;
-    --color-danger-soft: rgba(192, 57, 43, 0.08);
-    --color-danger-medium: rgba(192, 57, 43, 0.15);
-    /* Успех */
-    --color-success: #27AE60;
-    --color-success-soft: rgba(39, 174, 96, 0.10);
-    /* Предупреждение */
-    --color-warning: #E67E22;
-    --color-warning-soft: rgba(230, 126, 34, 0.10);
-    /* Границы и разделители */
-    --color-border: rgba(44, 37, 32, 0.10); /* Обычная граница */
-    --color-border-hover: rgba(44, 37, 32, 0.18); /* Граница при hover */
-    --color-border-focus: var(--color-accent); /* Граница при фокусе */
-    --color-border-dashed: rgba(44, 37, 32, 0.20); /* Пунктирные разделители */
-    /* Тени */
-    --shadow-xs: 0 1px 2px rgba(44, 37, 32, 0.05);
-    --shadow-sm: 0 1px 3px rgba(44, 37, 32, 0.08), 0 1px 2px rgba(44, 37, 32, 0.04);
-    --shadow-md: 0 4px 12px rgba(44, 37, 32, 0.08), 0 2px 4px rgba(44, 37, 32, 0.04);
-    --shadow-lg: 0 8px 24px rgba(44, 37, 32, 0.10), 0 4px 8px rgba(44, 37, 32, 0.05);
-    --shadow-xl: 0 16px 48px rgba(44, 37, 32, 0.12), 0 8px 16px rgba(44, 37, 32, 0.06);
+    --color-bg-primary:        #FAF7F2;
+    --color-bg-secondary:      #F3EDE4;
+    --color-bg-surface:        #FFFFFF;
+    --color-bg-surface-hover:  #F9F6F1;
+    --color-bg-elevated:       #FFFFFF;
+    --color-bg-inset:          #F0EBE3;
+
+    --color-text-primary:      #2C2520;
+    --color-text-secondary:    #78706A;
+    --color-text-tertiary:     #A49E98;
+    --color-text-placeholder:  #C4BEB8;
+    --color-text-inverse:      #FFFFFF;
+
+    --color-accent:            #21A038;
+    --color-accent-hover:      #1B8A2F;
+    --color-accent-active:     #167826;
+    --color-accent-soft:       rgba(33, 160, 56, 0.10);
+    --color-accent-medium:     rgba(33, 160, 56, 0.18);
+
+    --color-secondary:         #D4862A;
+    --color-secondary-soft:    rgba(212, 134, 42, 0.10);
+    --color-secondary-medium:  rgba(212, 134, 42, 0.18);
+
+    --color-danger:            #C0392B;
+    --color-danger-hover:      #A93226;
+    --color-danger-soft:       rgba(192, 57, 43, 0.08);
+    --color-danger-medium:     rgba(192, 57, 43, 0.15);
+
+    --color-success:           #27AE60;
+    --color-success-soft:      rgba(39, 174, 96, 0.10);
+
+    --color-warning:           #E67E22;
+    --color-warning-soft:      rgba(230, 126, 34, 0.10);
+
+    --color-border:            rgba(44, 37, 32, 0.10);
+    --color-border-hover:      rgba(44, 37, 32, 0.18);
+    --color-border-focus:      var(--color-accent);
+    --color-border-dashed:     rgba(44, 37, 32, 0.20);
+
+    --shadow-xs:     0 1px 2px rgba(44, 37, 32, 0.05);
+    --shadow-sm:     0 1px 3px rgba(44, 37, 32, 0.08), 0 1px 2px rgba(44, 37, 32, 0.04);
+    --shadow-md:     0 4px 12px rgba(44, 37, 32, 0.08), 0 2px 4px rgba(44, 37, 32, 0.04);
+    --shadow-lg:     0 8px 24px rgba(44, 37, 32, 0.10), 0 4px 8px rgba(44, 37, 32, 0.05);
+    --shadow-xl:     0 16px 48px rgba(44, 37, 32, 0.12), 0 8px 16px rgba(44, 37, 32, 0.06);
     --shadow-dialog: 0 20px 60px rgba(44, 37, 32, 0.15), 0 8px 20px rgba(44, 37, 32, 0.08);
-    /* Оверлей */
+
     --color-overlay: rgba(44, 37, 32, 0.45);
+
     /* ----------------------------------------
-     ТИПОГРАФИКА
+     РЁСЂРёС„С‚С‹
      ---------------------------------------- */
     --font-family-base: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
     --font-family-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Consolas', monospace;
-    /* Размеры шрифтов */
-    --font-size-xs: 11px;
-    --font-size-sm: 13px;
-    --font-size-base: 15px;
-    --font-size-md: 16px;
-    --font-size-lg: 18px;
-    --font-size-xl: 22px;
-    --font-size-2xl: 28px;
-    --font-size-3xl: 36px;
-    /* Межстрочный интервал */
-    --line-height-tight: 1.2;
-    --line-height-base: 1.5;
-    --line-height-relaxed: 1.6;
-    /* Толщина шрифтов */
-    --font-weight-normal: 400;
-    --font-weight-medium: 500;
+
+    /* Р‘Р°Р·РѕРІС‹Рµ СЂР°Р·РјРµСЂС‹ вЂ” РјРѕР±РёР»СЊРЅС‹Рµ */
+    --font-size-xs:   12px;
+    --font-size-sm:   14px;
+    --font-size-base: 16px;
+    --font-size-md:   18px;
+    --font-size-lg:   20px;
+    --font-size-xl:   24px;
+    --font-size-2xl:  30px;
+    --font-size-3xl:  38px;
+
+    --line-height-tight:   1.2;
+    --line-height-base:    1.5;
+    --line-height-relaxed: 1.65;
+
+    --font-weight-normal:   400;
+    --font-weight-medium:   500;
     --font-weight-semibold: 600;
-    --font-weight-bold: 700;
-    /* Межбуквенный */
-    --letter-spacing-tight: -0.01em;
+    --font-weight-bold:     700;
+
+    --letter-spacing-tight:  -0.01em;
     --letter-spacing-normal: 0;
-    --letter-spacing-wide: 0.02em;
-    --letter-spacing-caps: 0.06em;
+    --letter-spacing-wide:   0.02em;
+    --letter-spacing-caps:   0.07em;
+
     /* ----------------------------------------
-     СКРУГЛЕНИЯ
+     Р Р°РґРёСѓСЃС‹
      ---------------------------------------- */
-    --radius-xs: 4px;
-    --radius-sm: 8px;
-    --radius-md: 12px;
-    --radius-lg: 16px;
-    --radius-xl: 20px;
-    --radius-2xl: 24px;
+    --radius-xs:   4px;
+    --radius-sm:   8px;
+    --radius-md:   12px;
+    --radius-lg:   16px;
+    --radius-xl:   20px;
+    --radius-2xl:  24px;
     --radius-pill: 9999px;
+
     /* ----------------------------------------
-     ОТСТУПЫ (4px ритм)
+     РћС‚СЃС‚СѓРїС‹ (4px СЃРµС‚РєР°)
      ---------------------------------------- */
-    --space-1: 4px;
-    --space-2: 8px;
-    --space-3: 12px;
-    --space-4: 16px;
-    --space-5: 20px;
-    --space-6: 24px;
-    --space-7: 28px;
-    --space-8: 32px;
-    --space-9: 36px;
+    --space-1:  4px;
+    --space-2:  8px;
+    --space-3:  12px;
+    --space-4:  16px;
+    --space-5:  20px;
+    --space-6:  24px;
+    --space-7:  28px;
+    --space-8:  32px;
+    --space-9:  36px;
     --space-10: 40px;
     --space-12: 48px;
     --space-16: 64px;
+
     /* ----------------------------------------
-     РАЗМЕРЫ КОМПОНЕНТОВ
+     РљРѕРјРїРѕРЅРµРЅС‚РЅС‹Рµ СЂР°Р·РјРµСЂС‹ вЂ” РјРѕР±РёР»СЊРЅС‹Рµ
      ---------------------------------------- */
-    --nav-height: 56px;
-    --content-max-width: 640px;
-    --input-height: 48px;
-    --btn-height: 48px;
-    --btn-height-sm: 36px;
-    /* ----------------------------------------
-     ПЕРЕХОДЫ
-     ---------------------------------------- */
-    --transition-fast: 120ms ease-out;
-    --transition-base: 200ms ease-out;
-    --transition-slow: 300ms ease-out;
-    --transition-spring: 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
-    /* ----------------------------------------
-     КАТЕГОРИИ ТОВАРОВ
-     Адаптированы под тёплую палитру:
-     приглушённые, но различимые на светлом фоне
-     ---------------------------------------- */
-    --cat-fish: #2E8B8B; /* Бирюзовый приглушённый */
-    --cat-fish-soft: rgba(46, 139, 139, 0.12);
-    --cat-dairy: #4A8DB7; /* Спокойный голубой */
-    --cat-dairy-soft: rgba(74, 141, 183, 0.12);
-    --cat-deli: #C4603A; /* Терракотовый */
-    --cat-deli-soft: rgba(196, 96, 58, 0.12);
-    --cat-meat: #B84A4A; /* Приглушённый красный */
-    --cat-meat-soft: rgba(184, 74, 74, 0.12);
-    --cat-spices: #B8962E; /* Горчичный */
-    --cat-spices-soft: rgba(184, 150, 46, 0.12);
-    --cat-bread: #C48840; /* Хлебный */
-    --cat-bread-soft: rgba(196, 136, 64, 0.12);
-    --cat-fruits: #5A9E5A; /* Зелёное яблоко */
-    --cat-fruits-soft: rgba(90, 158, 90, 0.12);
-    --cat-vegetables: #6B9E3A; /* Травяной */
-    --cat-vegetables-soft: rgba(107, 158, 58, 0.12);
-    --cat-cereals: #9E923A; /* Пшеничный */
-    --cat-cereals-soft: rgba(158, 146, 58, 0.12);
-    --cat-canned: #C47040; /* Консервный оранжевый */
-    --cat-canned-soft: rgba(196, 112, 64, 0.12);
-    --cat-frozen: #5A8EB8; /* Ледяной голубой */
-    --cat-frozen-soft: rgba(90, 142, 184, 0.12);
-    --cat-drinks-nonalc: #8A6AAE; /* Лавандовый */
-    --cat-drinks-nonalc-soft: rgba(138, 106, 174, 0.12);
-    --cat-drinks-alc: #6B4E9E; /* Виноградный */
-    --cat-drinks-alc-soft: rgba(107, 78, 158, 0.12);
-    --cat-sweets: #C46A8A; /* Розовый зефир */
-    --cat-sweets-soft: rgba(196, 106, 138, 0.12);
-    --cat-baby: #D4A840; /* Солнечный */
-    --cat-baby-soft: rgba(212, 168, 64, 0.12);
-    --cat-pets: #8B7260; /* Древесный */
-    --cat-pets-soft: rgba(139, 114, 96, 0.12);
-    --cat-household: #8A7E72; /* Каменный */
-    --cat-household-soft: rgba(138, 126, 114, 0.12);
-    --cat-hygiene: #4A9EA8; /* Чистый бирюзовый */
-    --cat-hygiene-soft: rgba(74, 158, 168, 0.12);
-    --cat-other: #9E9A94; /* Нейтральный */
-    --cat-other-soft: rgba(158, 154, 148, 0.12);
+    --nav-height:            56px;
+    --content-max-width:     640px;
+    --input-height:          48px;
+    --btn-height:            48px;
+    --btn-height-sm:         36px;
     --assistant-panel-height: 76px;
+
+    /* ----------------------------------------
+     РџРµСЂРµС…РѕРґС‹
+     ---------------------------------------- */
+    --transition-fast:   120ms ease-out;
+    --transition-base:   200ms ease-out;
+    --transition-slow:   300ms ease-out;
+    --transition-spring: 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    /* ----------------------------------------
+     РљР°С‚РµРіРѕСЂРёРё (СЃРІРµС‚Р»Р°СЏ С‚РµРјР°)
+     ---------------------------------------- */
+    --cat-fish:              #2E8B8B;
+    --cat-fish-soft:         rgba(46, 139, 139, 0.12);
+    --cat-dairy:             #4A8DB7;
+    --cat-dairy-soft:        rgba(74, 141, 183, 0.12);
+    --cat-deli:              #C4603A;
+    --cat-deli-soft:         rgba(196, 96, 58, 0.12);
+    --cat-meat:              #B84A4A;
+    --cat-meat-soft:         rgba(184, 74, 74, 0.12);
+    --cat-spices:            #B8962E;
+    --cat-spices-soft:       rgba(184, 150, 46, 0.12);
+    --cat-bread:             #C48840;
+    --cat-bread-soft:        rgba(196, 136, 64, 0.12);
+    --cat-fruits:            #5A9E5A;
+    --cat-fruits-soft:       rgba(90, 158, 90, 0.12);
+    --cat-vegetables:        #6B9E3A;
+    --cat-vegetables-soft:   rgba(107, 158, 58, 0.12);
+    --cat-cereals:           #9E923A;
+    --cat-cereals-soft:      rgba(158, 146, 58, 0.12);
+    --cat-canned:            #C47040;
+    --cat-canned-soft:       rgba(196, 112, 64, 0.12);
+    --cat-frozen:            #5A8EB8;
+    --cat-frozen-soft:       rgba(90, 142, 184, 0.12);
+    --cat-drinks-nonalc:     #8A6AAE;
+    --cat-drinks-nonalc-soft: rgba(138, 106, 174, 0.12);
+    --cat-drinks-alc:        #6B4E9E;
+    --cat-drinks-alc-soft:   rgba(107, 78, 158, 0.12);
+    --cat-sweets:            #C46A8A;
+    --cat-sweets-soft:       rgba(196, 106, 138, 0.12);
+    --cat-baby:              #D4A840;
+    --cat-baby-soft:         rgba(212, 168, 64, 0.12);
+    --cat-pets:              #8B7260;
+    --cat-pets-soft:         rgba(139, 114, 96, 0.12);
+    --cat-household:         #8A7E72;
+    --cat-household-soft:    rgba(138, 126, 114, 0.12);
+    --cat-hygiene:           #4A9EA8;
+    --cat-hygiene-soft:      rgba(74, 158, 168, 0.12);
+    --cat-other:             #9E9A94;
+    --cat-other-soft:        rgba(158, 154, 148, 0.12);
+
+    /* ----------------------------------------
+     Р¤РѕРєСѓСЃ вЂ” РєРѕР»СЊС†Рѕ РґР»СЏ РўР’-РЅР°РІРёРіР°С†РёРё
+     ---------------------------------------- */
+    --focus-ring-width:  3px;
+    --focus-ring-offset: 3px;
+    --focus-ring-color:  var(--color-accent);
+}
+
+/* ============================================
+   РџР»Р°РЅС€РµС‚С‹ (768px+)
+   ============================================ */
+@media (min-width: 768px) {
+    :root {
+        --font-size-xs:   13px;
+        --font-size-sm:   15px;
+        --font-size-base: 17px;
+        --font-size-md:   19px;
+        --font-size-lg:   22px;
+        --font-size-xl:   26px;
+        --font-size-2xl:  32px;
+        --font-size-3xl:  42px;
+
+        --nav-height:     64px;
+        --input-height:   52px;
+        --btn-height:     52px;
+        --btn-height-sm:  40px;
+        --content-max-width: 720px;
+    }
+}
+
+/* ============================================
+   РўР’ / Р‘РѕР»СЊС€РѕР№ СЌРєСЂР°РЅ (1280px+ Р±РµР· touch)
+   ============================================ */
+@media (min-width: 1280px) and (hover: hover) and (pointer: coarse),
+       (min-width: 1280px) and (hover: none) {
+    :root {
+        --font-size-xs:   18px;
+        --font-size-sm:   22px;
+        --font-size-base: 26px;
+        --font-size-md:   30px;
+        --font-size-lg:   34px;
+        --font-size-xl:   42px;
+        --font-size-2xl:  52px;
+        --font-size-3xl:  64px;
+
+        --nav-height:          80px;
+        --input-height:        72px;
+        --btn-height:          72px;
+        --btn-height-sm:       56px;
+        --content-max-width:   960px;
+        --assistant-panel-height: 96px;
+
+        --space-1:  6px;
+        --space-2:  12px;
+        --space-3:  18px;
+        --space-4:  24px;
+        --space-5:  30px;
+        --space-6:  36px;
+        --space-7:  42px;
+        --space-8:  48px;
+        --space-9:  54px;
+        --space-10: 60px;
+        --space-12: 72px;
+        --space-16: 96px;
+
+        --radius-sm:  12px;
+        --radius-md:  18px;
+        --radius-lg:  24px;
+        --radius-xl:  30px;
+        --radius-2xl: 36px;
+
+        --focus-ring-width:  5px;
+        --focus-ring-offset: 5px;
+    }
+}
+
+/* ============================================
+   РЇРІРЅС‹Р№ РєР»Р°СЃСЃ TV-СЂРµР¶РёРјР° (РІС‹СЃС‚Р°РІР»СЏРµС‚СЃСЏ РёР· JS)
+   ============================================ */
+.is-tv-device {
+    --font-size-xs:   18px;
+    --font-size-sm:   22px;
+    --font-size-base: 26px;
+    --font-size-md:   30px;
+    --font-size-lg:   34px;
+    --font-size-xl:   42px;
+    --font-size-2xl:  52px;
+    --font-size-3xl:  64px;
+
+    --nav-height:          80px;
+    --input-height:        72px;
+    --btn-height:          72px;
+    --btn-height-sm:       56px;
+    --content-max-width:   960px;
+    --assistant-panel-height: 96px;
+
+    --space-1:  6px;
+    --space-2:  12px;
+    --space-3:  18px;
+    --space-4:  24px;
+    --space-5:  30px;
+    --space-6:  36px;
+    --space-7:  42px;
+    --space-8:  48px;
+    --space-9:  54px;
+    --space-10: 60px;
+    --space-12: 72px;
+    --space-16: 96px;
+
+    --radius-sm:  12px;
+    --radius-md:  18px;
+    --radius-lg:  24px;
+    --radius-xl:  30px;
+    --radius-2xl: 36px;
+
+    --focus-ring-width:  5px;
+    --focus-ring-offset: 5px;
 }

@@ -1,14 +1,15 @@
+/* src/pages/Statistics.css */
+
 .statistics {
     padding-bottom: var(--space-8);
 }
 
-/* --- Карточка общей суммы --- */
-
+/* РЎРІРѕРґРєР° */
 .stats-summary {
     background-color: var(--color-bg-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-xl);
-    padding: var(--space-6);
+    padding: var(--space-7) var(--space-6);
     margin-bottom: var(--space-8);
     text-align: center;
     box-shadow: var(--shadow-sm);
@@ -16,9 +17,10 @@
 }
 
 .stats-summary-label {
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-base);
     color: var(--color-text-tertiary);
     margin-bottom: var(--space-2);
+    font-weight: var(--font-weight-medium);
 }
 
 .stats-summary-amount {
@@ -26,50 +28,51 @@
     font-size: var(--font-size-3xl);
     font-weight: var(--font-weight-bold);
     color: var(--color-accent);
-    margin-bottom: var(--space-2);
+    margin-bottom: var(--space-3);
     letter-spacing: var(--letter-spacing-tight);
+    line-height: 1;
 }
 
 .stats-summary-details {
     display: flex;
-    gap: var(--space-2);
+    gap: var(--space-3);
     justify-content: center;
     flex-wrap: wrap;
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-base);
     color: var(--color-text-tertiary);
+    font-weight: var(--font-weight-medium);
 }
 
-/* --- Секция «По категориям» --- */
-
+/* Р—Р°РіРѕР»РѕРІРѕРє СЃРµРєС†РёРё */
 .stats-section-title {
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
     color: var(--color-text-tertiary);
     margin: 0 0 var(--space-4) 0;
     text-transform: uppercase;
     letter-spacing: var(--letter-spacing-caps);
 }
 
+/* РљР°С‚РµРіРѕСЂРёРё */
 .stats-categories {
     background-color: var(--color-bg-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
-    padding: var(--space-3) var(--space-5);
+    padding: var(--space-4) var(--space-6);
     margin-bottom: var(--space-8);
     box-shadow: var(--shadow-xs);
 }
 
-/* --- Среднее за чек --- */
-
+/* РЎСЂРµРґРЅРµРµ */
 .stats-average {
     background-color: var(--color-bg-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
-    padding: var(--space-5) var(--space-6);
+    padding: var(--space-6);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: var(--space-3);
+    gap: var(--space-4);
     flex-wrap: wrap;
     box-shadow: var(--shadow-xs);
     animation: cv-fade-in-up 400ms ease-out both;
@@ -77,8 +80,9 @@
 }
 
 .stats-average-label {
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-base);
     color: var(--color-text-secondary);
+    font-weight: var(--font-weight-medium);
 }
 
 .stats-average-amount {

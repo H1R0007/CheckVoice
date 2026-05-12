@@ -6,25 +6,21 @@
     border-bottom: 1px dashed var(--color-border-dashed);
     touch-action: pan-y;
     animation: cv-item-in 250ms ease-out both;
+    /* Гарантируем что элемент фокусируем при навигации с пульта */
+    scroll-margin: var(--space-4);
+    scroll-margin-block: var(--space-4);
 }
 
-    .receipt-item:last-child {
-        border-bottom: none;
-    }
+.receipt-item:last-child {
+    border-bottom: none;
+}
 
 @keyframes cv-item-in {
-    from {
-        opacity: 0;
-        transform: translateY(6px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
-/* --- ������� ���� �������� --- */
+/* --- Зона свайпа удаления --- */
 
 .receipt-item-delete-zone {
     position: absolute;
@@ -40,30 +36,48 @@
     color: var(--color-text-inverse);
 }
 
-/* --- ������� ������ --- */
+/* --- Основной контент --- */
 
 .receipt-item-content {
     position: relative;
     z-index: 1;
     padding: var(--space-4) var(--space-5);
     background-color: var(--color-bg-surface);
-    transition: transform 200ms ease-out, background-color var(--transition-fast), box-shadow var(--transition-fast);
+    transition:
+        transform 200ms ease-out,
+        background-color var(--transition-fast),
+        box-shadow var(--transition-fast),
+        outline var(--transition-fast);
     will-change: transform;
     transform: translateZ(0);
     backface-visibility: hidden;
+    /* Минимальная высота строки для удобства нажатия на ТВ */
+    min-height: 72px;
 }
 
-    .receipt-item-content.swiping {
-        transition: none;
-    }
+.receipt-item-content.swiping {
+    transition: none;
+}
 
-    .receipt-item-content.low-confidence {
-        box-shadow: inset 3px 0 0 var(--color-warning);
-    }
+.receipt-item-content.low-confidence {
+    box-shadow: inset 4px 0 0 var(--color-warning);
+}
 
-    .receipt-item-content.learned-exact {
-        box-shadow: inset 3px 0 0 var(--color-accent);
-    }
+.receipt-item-content.learned-exact {
+    box-shadow: inset 4px 0 0 var(--color-accent);
+}
+
+/* Фокус на элементе списка (ТВ-навигация) */
+.receipt-item:focus-within .receipt-item-content {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: calc(var(--focus-ring-offset) * -1);
+}
+
+.is-tv-device .receipt-item:focus-within .receipt-item-content {
+    background-color: var(--color-accent-soft);
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: calc(var(--focus-ring-offset) * -1);
+}
 
 @media (hover: hover) and (pointer: fine) {
     .receipt-item:not(.read-only) .receipt-item-content:hover {
@@ -71,13 +85,14 @@
     }
 }
 
-/* --- �������� ������ --- */
+/* --- Верхняя строка элемента --- */
 
 .item-main {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     margin-bottom: var(--space-2);
+    gap: var(--space-3);
 }
 
 .item-info {
@@ -85,34 +100,35 @@
     flex: 1;
     min-width: 0;
     gap: var(--space-2);
+    align-items: flex-start;
 }
 
 .item-number {
     flex-shrink: 0;
-    min-width: 22px;
+    min-width: 28px;
     font-family: var(--font-family-mono);
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-medium);
     color: var(--color-text-tertiary);
+    line-height: var(--line-height-base);
 }
 
 .item-title {
     color: var(--color-text-primary);
     font-size: var(--font-size-base);
-    font-weight: var(--font-weight-medium);
+    font-weight: var(--font-weight-semibold);
     line-height: var(--line-height-base);
     word-break: break-word;
 }
 
-/* --- ���� --- */
+/* --- Цена --- */
 
 .item-price-block {
     flex-shrink: 0;
-    margin-left: var(--space-3);
 }
 
 .item-price {
-    padding: 0;
+    padding: var(--space-1) var(--space-2);
     border: none;
     background: none;
     font-family: var(--font-family-mono);
@@ -121,33 +137,39 @@
     color: var(--color-text-primary);
     white-space: nowrap;
     line-height: 1.2;
+    border-radius: var(--radius-sm);
 }
 
-    .item-price.editable {
-        cursor: pointer;
-        border-bottom: 1px dashed var(--color-border-dashed);
-        transition: border-color var(--transition-fast), color var(--transition-fast);
-    }
+.item-price.editable {
+    cursor: pointer;
+    border-bottom: 2px dashed var(--color-border-dashed);
+    transition:
+        border-color var(--transition-fast),
+        color var(--transition-fast),
+        background-color var(--transition-fast);
+}
 
-    .item-price:disabled {
-        cursor: default;
-        opacity: 1;
-    }
+.item-price:disabled {
+    cursor: default;
+    opacity: 1;
+}
 
-    .item-price:focus-visible {
-        outline: 2px solid var(--color-accent);
-        outline-offset: 3px;
-        border-radius: 2px;
-    }
+.item-price:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+    border-radius: var(--radius-sm);
+    border-bottom-color: transparent;
+}
 
 @media (hover: hover) and (pointer: fine) {
     .item-price.editable:hover {
         border-color: var(--color-accent);
         color: var(--color-accent);
+        background-color: var(--color-accent-soft);
     }
 }
 
-/* --- �������������� ���� --- */
+/* --- Редактирование цены --- */
 
 .item-price-edit {
     display: flex;
@@ -156,8 +178,8 @@
 }
 
 .price-edit-input {
-    width: 80px;
-    padding: var(--space-1) var(--space-2);
+    width: 100px;
+    padding: var(--space-2) var(--space-3);
     border: 2px solid var(--color-accent);
     border-radius: var(--radius-sm);
     background-color: var(--color-bg-inset);
@@ -167,27 +189,31 @@
     font-weight: var(--font-weight-bold);
     text-align: right;
     outline: none;
-    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    transition:
+        border-color var(--transition-fast),
+        box-shadow var(--transition-fast);
 }
 
-    .price-edit-input:focus-visible {
-        border-color: var(--color-accent-hover);
-        box-shadow: 0 0 0 3px var(--color-accent-soft);
-    }
+.price-edit-input:focus-visible {
+    border-color: var(--color-accent-hover);
+    box-shadow: 0 0 0 4px var(--color-accent-soft);
+}
 
 .price-edit-currency {
     font-family: var(--font-family-mono);
+    font-size: var(--font-size-md);
     font-weight: var(--font-weight-bold);
     color: var(--color-text-tertiary);
 }
 
-/* --- ������ ������ --- */
+/* --- Нижняя строка --- */
 
 .item-bottom {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
     gap: var(--space-3);
+    flex-wrap: wrap;
 }
 
 .item-category-area {
@@ -201,30 +227,38 @@
 }
 
 .item-category-select {
-    max-width: 220px;
+    max-width: 260px;
     width: 100%;
-    height: 32px;
+    height: var(--btn-height-sm);
     padding: 0 var(--space-3);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-pill);
     background-color: var(--color-bg-surface);
     color: var(--color-text-primary);
-    font-size: var(--font-size-xs);
+    font-size: var(--font-size-sm);
     font-weight: var(--font-weight-medium);
     outline: none;
     cursor: pointer;
-    transition: border-color var(--transition-fast), background-color var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast);
+    transition:
+        border-color var(--transition-fast),
+        background-color var(--transition-fast),
+        box-shadow var(--transition-fast);
 }
 
-    .item-category-select:hover {
-        border-color: var(--color-border-hover);
-        background-color: var(--color-bg-surface-hover);
-    }
+.item-category-select:hover {
+    border-color: var(--color-border-hover);
+    background-color: var(--color-bg-surface-hover);
+}
 
-    .item-category-select:focus-visible {
-        border-color: var(--color-accent);
-        box-shadow: 0 0 0 3px var(--color-accent-soft);
-    }
+.item-category-select:focus-visible {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 var(--focus-ring-width) var(--color-accent-soft);
+}
+
+.is-tv-device .item-category-select:focus {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 var(--focus-ring-width) var(--color-accent-soft);
+}
 
 .item-category-select--low-confidence {
     border-color: var(--color-warning);
@@ -243,35 +277,50 @@
     gap: 6px;
     font-size: var(--font-size-xs);
     color: var(--color-warning);
-    line-height: 1.2;
+    line-height: 1.3;
 }
 
 .item-category-hint--learned {
     color: var(--color-accent);
 }
 
+/* --- Кнопка удаления --- */
+
 .item-delete-btn {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    padding: var(--space-1) var(--space-2);
+    /* Большая зона касания */
+    width: 44px;
+    height: 44px;
     border: none;
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-md);
     background: none;
     color: var(--color-text-placeholder);
     cursor: pointer;
-    transition: color var(--transition-fast), background-color var(--transition-fast), transform var(--transition-fast);
+    transition:
+        color var(--transition-fast),
+        background-color var(--transition-fast),
+        transform var(--transition-fast);
 }
 
-    .item-delete-btn:active {
-        transform: scale(0.96);
-    }
+.item-delete-btn:active {
+    transform: scale(0.94);
+}
 
-    .item-delete-btn:focus-visible {
-        outline: 2px solid var(--color-accent);
-        outline-offset: 2px;
-    }
+.item-delete-btn:focus-visible {
+    outline: var(--focus-ring-width) solid var(--color-danger);
+    outline-offset: var(--focus-ring-offset);
+    border-radius: var(--radius-md);
+}
+
+.is-tv-device .item-delete-btn:focus {
+    outline: var(--focus-ring-width) solid var(--color-danger);
+    outline-offset: var(--focus-ring-offset);
+    background-color: var(--color-danger-soft);
+    color: var(--color-danger);
+}
 
 @media (hover: hover) and (pointer: fine) {
     .item-delete-btn:hover {
@@ -280,7 +329,7 @@
     }
 }
 
-/* --- �������� --- */
+/* --- Удаление --- */
 
 .receipt-item.removing {
     animation: cv-item-slide-out 300ms ease-in forwards;
@@ -288,21 +337,9 @@
 }
 
 @keyframes cv-item-slide-out {
-    0% {
-        opacity: 1;
-        max-height: 200px;
-    }
-
-    40% {
-        opacity: 0;
-    }
-
-    100% {
-        opacity: 0;
-        max-height: 0;
-        border-bottom-width: 0;
-        overflow: hidden;
-    }
+    0%   { opacity: 1; max-height: 200px; }
+    40%  { opacity: 0; }
+    100% { opacity: 0; max-height: 0; border-bottom-width: 0; overflow: hidden; }
 }
 
 .sr-only {

@@ -1,21 +1,11 @@
 /* src/index.css */
-/* ============================================
-   CheckVoice — Базовые глобальные стили
-   ============================================ */
 
 @import './styles/tokens.css';
 @import './styles/animations.css';
 @import './styles/theme-dark.css';
 @import './styles/theme-midnight.css';
 
-/* ----------------------------------------
-   Подключение шрифтов
-   ---------------------------------------- */
-
-/* Inter — основной */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
-/* JetBrains Mono — для цен и чековой стилистики */
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&display=swap');
 
 /* ----------------------------------------
@@ -31,9 +21,7 @@
 }
 
 html {
-    /* Плавный скролл */
     scroll-behavior: smooth;
-    /* Предотвращаем масштабирование на iOS при фокусе в инпут */
     -webkit-text-size-adjust: 100%;
 }
 
@@ -47,15 +35,12 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
-    /* Тёплая текстура фона — едва заметный noise-эффект через градиент */
-    background-image: radial-gradient(ellipse at 20% 0%, rgba(33, 160, 56, 0.03) 0%, transparent 60%), radial-gradient(ellipse at 80% 100%, rgba(212, 134, 42, 0.03) 0%, transparent 60%);
+    background-image:
+        radial-gradient(ellipse at 20% 0%, rgba(33, 160, 56, 0.03) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 100%, rgba(212, 134, 42, 0.03) 0%, transparent 60%);
     background-attachment: fixed;
     min-height: 100vh;
 }
-
-/* ----------------------------------------
-   Типографика — базовые элементы
-   ---------------------------------------- */
 
 h1, h2, h3, h4 {
     font-weight: var(--font-weight-bold);
@@ -69,10 +54,6 @@ p {
     color: var(--color-text-secondary);
 }
 
-/* ----------------------------------------
-   Формы — базовые элементы
-   ---------------------------------------- */
-
 input,
 button,
 select,
@@ -82,9 +63,9 @@ textarea {
     line-height: inherit;
 }
 
-    input::placeholder {
-        color: var(--color-text-placeholder);
-    }
+input::placeholder {
+    color: var(--color-text-placeholder);
+}
 
 button {
     cursor: pointer;
@@ -93,20 +74,16 @@ button {
     color: inherit;
 }
 
-/* ----------------------------------------
-   Списки
-   ---------------------------------------- */
-
 ul, ol {
     list-style: none;
 }
 
 /* ----------------------------------------
-   Скроллбар (webkit)
+   Скроллбар
    ---------------------------------------- */
 
 ::-webkit-scrollbar {
-    width: 5px;
+    width: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -118,18 +95,17 @@ ul, ol {
     border-radius: var(--radius-pill);
 }
 
-    ::-webkit-scrollbar-thumb:hover {
-        background-color: var(--color-border-hover);
-    }
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-border-hover);
+}
 
-/* Firefox */
 * {
     scrollbar-width: thin;
     scrollbar-color: var(--color-border) transparent;
 }
 
 /* ----------------------------------------
-   Убираем стрелки у числовых инпутов
+   Числовые инпуты — убираем стрелки
    ---------------------------------------- */
 
 input[type=number]::-webkit-outer-spin-button,
@@ -143,18 +119,24 @@ input[type=number] {
 }
 
 /* ----------------------------------------
-   Фокус — accessibility
+   Фокус — единая система для ТВ и клавиатуры
    ---------------------------------------- */
 
 :focus-visible {
-    outline: 2px solid var(--color-accent);
-    outline-offset: 2px;
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
     border-radius: var(--radius-xs);
 }
 
-/* Убираем outline для мыши, оставляем для клавиатуры */
 :focus:not(:focus-visible) {
     outline: none;
+}
+
+/* На ТВ показываем фокус всегда (нет мыши) */
+.is-tv-device :focus {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+    border-radius: var(--radius-sm);
 }
 
 /* ----------------------------------------

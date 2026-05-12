@@ -25,6 +25,38 @@
 	margin: 0 0 var(--space-3) 0;
 }
 
+/* --- TV-уведомление --- */
+
+.settings-tv-notice {
+	display: flex;
+	align-items: flex-start;
+	gap: var(--space-3);
+	padding: var(--space-4);
+	margin-bottom: var(--space-3);
+	border-radius: var(--radius-md);
+	background-color: var(--color-accent-soft);
+	border: 1px solid var(--color-accent-medium);
+	font-size: var(--font-size-sm);
+	color: var(--color-text-secondary);
+	line-height: var(--line-height-relaxed);
+}
+
+.settings-tv-notice--warning {
+	background-color: var(--color-warning-soft);
+	border-color: var(--color-warning);
+	color: var(--color-text-secondary);
+}
+
+.settings-tv-notice-icon {
+	flex-shrink: 0;
+	margin-top: 2px;
+	color: var(--color-accent);
+}
+
+.settings-tv-notice--warning .settings-tv-notice-icon {
+	color: var(--color-warning);
+}
+
 /* --- Кнопки-карточки --- */
 
 .settings-btn {
@@ -41,7 +73,8 @@
 	text-align: left;
 	margin-bottom: var(--space-2);
 	box-shadow: var(--shadow-xs);
-	transition: background-color var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast), color var(--transition-fast);
+	transition: background-color var(--transition-fast), border-color var(--transition-fast),
+		box-shadow var(--transition-fast), transform var(--transition-fast);
 }
 
 	.settings-btn:hover {
@@ -52,6 +85,11 @@
 
 	.settings-btn:active {
 		transform: scale(0.99);
+	}
+
+	.settings-btn:focus-visible {
+		outline: 2px solid var(--color-accent);
+		outline-offset: 2px;
 	}
 
 .settings-btn-icon {
@@ -194,12 +232,17 @@
 	color: var(--color-text-primary);
 	cursor: pointer;
 	text-align: left;
-	transition: background-color var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast), color var(--transition-fast);
+	transition: background-color var(--transition-fast), border-color var(--transition-fast);
 }
 
 	.import-btn:hover {
 		background-color: var(--color-bg-surface-hover);
 		border-color: var(--color-border-hover);
+	}
+
+	.import-btn:focus-visible {
+		outline: 2px solid var(--color-accent);
+		outline-offset: 2px;
 	}
 
 .import-btn-label {
@@ -240,11 +283,4 @@
 	.import-cancel:hover {
 		color: var(--color-text-primary);
 		background-color: var(--color-bg-inset);
-	}
-
-	.settings-btn:focus-visible,
-	.import-btn:focus-visible,
-	.import-cancel:focus-visible {
-		outline: 2px solid var(--color-accent);
-		outline-offset: 2px;
 	}

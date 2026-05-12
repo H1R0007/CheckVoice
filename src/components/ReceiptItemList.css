@@ -1,23 +1,27 @@
 /* src/components/ReceiptItemList.css */
 
 .receipt-item-list {
-	position: relative;
-	overflow: hidden;
-	margin: 0;
-	padding: 0;
-	list-style: none;
-	border: 1px solid var(--color-border);
-	border-radius: var(--radius-lg);
-	background-color: var(--color-bg-surface);
-	box-shadow: var(--shadow-xs);
+    position: relative;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background-color: var(--color-bg-surface);
+    box-shadow: var(--shadow-xs);
+    /* Убираем overflow: hidden для корректной работы outline фокуса */
+    overflow: visible;
 }
 
-	/* Декоративный «зубчатый» край */
-	.receipt-item-list::after {
-		content: '';
-		display: block;
-		height: 10px;
-		pointer-events: none;
-		background: linear-gradient( -45deg, var(--color-bg-primary) 4px, transparent 0 ) left / 8px 100% repeat-x, linear-gradient( 45deg, var(--color-bg-primary) 4px, transparent 0 ) left / 8px 100% repeat-x;
-		border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-	}
+/* Декоративный «зубчатый» край — оставляем через псевдоэлемент последнего li */
+.receipt-item-list > li:last-child::after {
+    content: '';
+    display: block;
+    height: 10px;
+    pointer-events: none;
+    background:
+        linear-gradient(-45deg, var(--color-bg-primary) 4px, transparent 0) left / 8px 100% repeat-x,
+        linear-gradient( 45deg, var(--color-bg-primary) 4px, transparent 0) left / 8px 100% repeat-x;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
