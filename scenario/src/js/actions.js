@@ -64,3 +64,19 @@ function editPriceByName(text, context) {
         text: text
     }, context);
 }
+
+// ===== НОВЫЕ ФУНКЦИИ =====
+
+function askPeriodTotal(period, context) {
+    addAction({
+        type: "ask_period_total",
+        period: period
+    }, context);
+}
+
+function askItemPrice(itemName, context) {
+    addAction({
+        type: "ask_item_price",
+        itemName: itemName
+    }, context);
+}
