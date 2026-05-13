@@ -37,10 +37,11 @@ function askTotal(context) {
     }, context);
 }
 
-function askCategory(categoryText, context) {
+function askCategory(categoryText, period, context) {
     addAction({
         type: "ask_category",
-        categoryText: categoryText
+        categoryText: categoryText,
+        period: period
     }, context);
 }
 
@@ -52,20 +53,12 @@ function editPrice(id, newPrice, context) {
     }, context);
 }
 
-function deleteAllReceipts(context) {
-    addAction({
-        type: "delete_all_receipts"
-    }, context);
-}
-
 function editPriceByName(text, context) {
     addAction({
         type: "edit_price_by_name",
         text: text
     }, context);
 }
-
-// ===== НОВЫЕ ФУНКЦИИ =====
 
 function askPeriodTotal(period, context) {
     addAction({
@@ -78,5 +71,53 @@ function askItemPrice(itemName, context) {
     addAction({
         type: "ask_item_price",
         itemName: itemName
+    }, context);
+}
+
+function readReceipt(context) {
+    addAction({
+        type: "read_receipt"
+    }, context);
+}
+
+function cancelPending(context) {
+    addAction({
+        type: "cancel_pending"
+    }, context);
+}
+
+function undoLastItem(context) {
+    addAction({
+        type: "undo_last_item"
+    }, context);
+}
+
+function showHelp(context) {
+    addAction({
+        type: "show_help"
+    }, context);
+}
+
+function openLastReceipt(context) {
+    addAction({
+        type: "open_last_receipt"
+    }, context);
+}
+
+function editLastReceipt(context) {
+    addAction({
+        type: "edit_last_receipt"
+    }, context);
+}
+
+function deleteLastReceipt(context) {
+    addAction({
+        type: "delete_last_receipt"
+    }, context);
+}
+
+function exportData(context) {
+    addAction({
+        type: "export_data"
     }, context);
 }

@@ -1,74 +1,61 @@
 theme: /
 
-    # =============================================
-    # Запросы по СТАТИСТИКЕ (данные из истории)
-    # =============================================
-
     state: СтатистикаПоКатегорииЗаНеделю
-        q!: сколько [я] (потратил|потратила|потрачено|ушло|израсходовано) за неделю на $AnyText::categoryText
-        q!: (расходы|траты|затраты) за неделю на $AnyText::categoryText
-        q!: сколько ушло за неделю на $AnyText::categoryText
-        q!: за неделю на $AnyText::categoryText [сколько|что]
+        q!: сколько [я] (потратил|потратила|потрачено) за неделю на $AnyText::categoryText
+        q!: (расходы|траты) за неделю на $AnyText::categoryText
 
         script:
             var text = $parseTree._categoryText;
             if (text) {
-                addAction({ type: "ask_category", categoryText: text, period: "week" }, $context);
+                askCategory(text, "week", $context);
             } else {
-                $reactions.answer("Уточните категорию, например: сколько потрачено на мясо за неделю.");
+                $reactions.answer("Уточните категорию.");
             }
 
     state: СтатистикаПоКатегорииЗаМесяц
-        q!: сколько [я] (потратил|потратила|потрачено|ушло|израсходовано) за месяц на $AnyText::categoryText
-        q!: (расходы|траты|затраты) за месяц на $AnyText::categoryText
-        q!: сколько ушло за месяц на $AnyText::categoryText
-        q!: за месяц на $AnyText::categoryText [сколько|что]
+        q!: сколько [я] (потратил|потратила|потрачено) за месяц на $AnyText::categoryText
+        q!: (расходы|траты) за месяц на $AnyText::categoryText
 
         script:
             var text = $parseTree._categoryText;
             if (text) {
-                addAction({ type: "ask_category", categoryText: text, period: "month" }, $context);
+                askCategory(text, "month", $context);
             } else {
-                $reactions.answer("Уточните категорию, например: сколько потрачено на мясо за месяц.");
+                $reactions.answer("Уточните категорию.");
             }
 
     state: СтатистикаОбщаяЗаНеделю
-        q!: сколько [я] (потратил|потратила|потрачено|ушло) за неделю [~всего|~итого]
-        q!: (расходы|траты|затраты) за неделю [~всего|~итого]
+        q!: сколько [я] (потратил|потратила|потрачено) за неделю [~всего|~итого]
+        q!: (расходы|траты) за неделю
         q!: общая сумма за неделю
-        q!: итого за неделю
 
         script:
-            addAction({ type: "ask_period_total", period: "week" }, $context);
+            askPeriodTotal("week", $context);
 
     state: СтатистикаОбщаяЗаМесяц
-        q!: сколько [я] (потратил|потратила|потрачено|ушло) за месяц [~всего|~итого]
-        q!: (расходы|траты|затраты) за месяц [~всего|~итого]
+        q!: сколько [я] (потратил|потратила|потрачено) за месяц [~всего|~итого]
+        q!: (расходы|траты) за месяц
         q!: общая сумма за месяц
-        q!: итого за месяц
 
         script:
-            addAction({ type: "ask_period_total", period: "month" }, $context);
+            askPeriodTotal("month", $context);
 
     state: СтатистикаОбщаяЗаВсёВремя
-        q!: сколько [я] (потратил|потратила|потрачено|ушло) [за всё время|~вообще|~суммарно]
-        q!: (расходы|траты|затраты) [за всё время|~вообще]
-        q!: общая сумма [за всё время]
+        q!: сколько [я] (потратил|потратила|потрачено) [за всё время|~вообще]
+        q!: (расходы|траты) [за всё время]
         q!: всего потрачено
 
         script:
-            addAction({ type: "ask_period_total", period: "all" }, $context);
+            askPeriodTotal("all", $context);
 
     state: СтатистикаПоКатегории
-        q!: сколько [я] (потратил|потратила|потрачено|ушло) [~всего] на $AnyText::categoryText
-        q!: (расходы|траты|затраты) на $AnyText::categoryText
-        q!: сколько [было] потрачено на $AnyText::categoryText
-        q!: на $AnyText::categoryText (потрачено|ушло|израсходовано) [сколько]
+        q!: сколько [я] (потратил|потратила|потрачено) на $AnyText::categoryText
+        q!: (расходы|траты) на $AnyText::categoryText
 
         script:
             var text = $parseTree._categoryText;
             if (text) {
-                addAction({ type: "ask_category", categoryText: text, period: "all" }, $context);
+                askCategory(text, "all", $context);
             } else {
-                $reactions.answer("Уточните категорию, например: сколько потрачено на хлеб.");
+                $reactions.answer("Уточните категорию.");
             }

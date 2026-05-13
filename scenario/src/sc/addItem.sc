@@ -1,12 +1,9 @@
 theme: /
 
-    state: ДобавлениеТовара
-        # Слушаем только явные команды добавления. 
-        # Строки типа "Молоко 89" уйдут в Fallback для более умной проверки.
-        q!: (~добавить|~записать|~внести|плюс|~запиши|~добавь) $AnyText::itemText
-
+    state: ТоварДобавлен
+        event!: item_added
         script:
-            var text = $parseTree._itemText;
-            if (text && text.length > 1) {
-                addItem(text, $context);
-            }
+            var params = get_event_params($context) || {};
+            var title = params.title || "товар";
+            var price = (typeof params.price === "number") ? params.price : 0;
+            $reactions.answer(title + " за " + price + " рублей. Готово!");
