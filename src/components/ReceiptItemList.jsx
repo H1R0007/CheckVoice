@@ -1,8 +1,11 @@
 // src/components/ReceiptItemList.jsx
 
-import React, { useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import ReceiptItem from './ReceiptItem';
 import './ReceiptItemList.css';
+
+const ITEMS_PER_PAGE = 6;
 
 export default function ReceiptItemList({
   items,
@@ -11,33 +14,50 @@ export default function ReceiptItemList({
   onEditCategory,
   readOnly = false,
 }) {
+  const [currentPage, setCurrentPage] = useState(0);
   const listRef = useRef(null);
   const prevCountRef = useRef(items.length);
 
-  // Скролл к новому элементу при добавлении
+  const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE);
+  const startIndex = currentPage * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const visibleItems = items.slice(startIndex, endIndex);
+
+  const hasPrevPage = currentPage > 0;
+  const hasNextPage = currentPage < totalPages - 1;
+
+  // При добавлении товара переходим на последнюю страницу
   useEffect(() => {
-    if (items.length > prevCountRef.current && listRef.current) {
-      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const lastItem = listRef.current.querySelector('li:last-child');
-
-      if (lastItem) {
-        lastItem.scrollIntoView({
-          behavior: prefersReducedMotion ? 'auto' : 'smooth',
-          block: 'nearest',
-        });
-      }
+    if (items.length > prevCountRef.current) {
+      const lastPage = Math.max(0, Math.ceil(items.length / ITEMS_PER_PAGE) - 1);
+      setCurrentPage(lastPage);
     }
-
     prevCountRef.current = items.length;
   }, [items.length]);
 
-  // Обработчик фокуса: при получении фокуса любым элементом списка
-  // прокручиваем его в зону видимости — критично для ТВ-навигации
+  // При удалении товара корректируем страницу если она стала пустой
+  useEffect(() => {
+    if (currentPage > 0 && visibleItems.length === 0 && items.length > 0) {
+      setCurrentPage(Math.max(0, currentPage - 1));
+    }
+  }, [currentPage, visibleItems.length, items.length]);
+
+  const handlePrevPage = useCallback(() => {
+    if (hasPrevPage) {
+      setCurrentPage((prev) => prev - 1);
+    }
+  }, [hasPrevPage]);
+
+  const handleNextPage = useCallback(() => {
+    if (hasNextPage) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  }, [hasNextPage]);
+
   const handleFocusCapture = useCallback((e) => {
     const li = e.target.closest('li');
     if (!li) return;
 
-    // Используем scrollIntoView с block:'nearest' чтобы не прыгал на уже видимых
     li.scrollIntoView({
       behavior: 'smooth',
       block: 'nearest',
@@ -46,24 +66,59 @@ export default function ReceiptItemList({
   }, []);
 
   return (
-    <ul
-      className="receipt-item-list"
-      ref={listRef}
-      onFocusCapture={handleFocusCapture}
-    >
-      {items.map(function (item, index) {
-        return (
-          <ReceiptItem
-            key={item.id}
-            item={item}
-            index={index}
-            onDelete={onDelete}
-            onEditPrice={onEditPrice}
-            onEditCategory={onEditCategory}
-            readOnly={readOnly}
-          />
-        );
-      })}
-    </ul>
+    <div className="receipt-item-list-wrapper">
+      <ul
+        className="receipt-item-list"
+        ref={listRef}
+        onFocusCapture={handleFocusCapture}
+      >
+        {visibleItems.map(function (item, index) {
+          const globalIndex = startIndex + index;
+          return (
+            <ReceiptItem
+              key={item.id}
+              item={item}
+              index={globalIndex}
+              onDelete={onDelete}
+              onEditPrice={onEditPrice}
+              onEditCategory={onEditCategory}
+              readOnly={readOnly}
+            />
+          );
+        })}
+      </ul>
+
+      {totalPages > 1 && (
+        <div className="receipt-pagination" role="navigation" aria-label="Навигация по страницам чека">
+          <button
+            type="button"
+            className="pagination-btn pagination-btn--prev"
+            onClick={handlePrevPage}
+            disabled={!hasPrevPage}
+            aria-label="Предыдущая страница"
+          >
+            <ChevronLeft size={20} strokeWidth={2.5} aria-hidden="true" />
+            <span className="pagination-btn-text">Назад</span>
+          </button>
+
+          <div className="pagination-indicator" aria-live="polite" aria-atomic="true">
+            <span className="pagination-current">{currentPage + 1}</span>
+            <span className="pagination-divider">/</span>
+            <span className="pagination-total">{totalPages}</span>
+          </div>
+
+          <button
+            type="button"
+            className="pagination-btn pagination-btn--next"
+            onClick={handleNextPage}
+            disabled={!hasNextPage}
+            aria-label="Следующая страница"
+          >
+            <span className="pagination-btn-text">Вперёд</span>
+            <ChevronRight size={20} strokeWidth={2.5} aria-hidden="true" />
+          </button>
+        </div>
+      )}
+    </div>
   );
 }
