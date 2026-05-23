@@ -1,8 +1,9 @@
 // src/components/ReceiptItem.jsx
+// Структура карточки — возвращаем оригинальную двухрядную
 
 import React, { useState, useRef, useCallback, useEffect } from 'react';
-import { X, Trash2, AlertCircle, Brain } from 'lucide-react';
-import CategoryBadge from './CategoryBadge';
+import { Trash2, AlertCircle, Brain } from 'lucide-react';
+import { getCategoryByKey } from '../constants/categories';
 import { formatPriceShort } from '../utils/formatPrice';
 import { CATEGORIES } from '../constants/categories';
 import './ReceiptItem.css';
@@ -10,13 +11,18 @@ import './ReceiptItem.css';
 export default function ReceiptItem({
   item,
   index,
+  isSelected,
+  onSelect,
   onDelete,
   onEditPrice,
+  onEditTitle,
   onEditCategory,
   readOnly = false,
 }) {
-  const [isEditing, setIsEditing] = useState(false);
-  const [editValue, setEditValue] = useState('');
+  const [isEditingPrice, setIsEditingPrice] = useState(false);
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [editPriceValue, setEditPriceValue] = useState('');
+  const [editTitleValue, setEditTitleValue] = useState('');
   const [isRemoving, setIsRemoving] = useState(false);
   const [swipeX, setSwipeX] = useState(0);
   const [isSwiping, setIsSwiping] = useState(false);
@@ -31,55 +37,71 @@ export default function ReceiptItem({
     item.categorySource === 'auto' &&
     typeof item.categoryConfidence === 'number' &&
     item.categoryConfidence < 0.55;
-
   const isLearnedExact = item.categorySource === 'learned-exact';
 
-  const handleStartEdit = () => {
-    if (readOnly || isRemoving) return;
-    setEditValue(String(item.price));
-    setIsEditing(true);
+  const category = getCategoryByKey(item.category);
+  const catColor  = category ? `var(${category.cssVar})`     : 'var(--color-text-tertiary)';
+  const catBg     = category ? `var(${category.cssVarSoft})` : 'var(--color-bg-inset)';
+
+  const handleCardClick = () => {
+    if (readOnly || isEditingPrice || isEditingTitle) return;
+    if (typeof onSelect === 'function') onSelect(item.id);
   };
 
-  const handleSaveEdit = () => {
-    const newPrice = parseFloat(editValue.replace(',', '.'));
-
-    if (!isNaN(newPrice) && newPrice >= 0) {
-      onEditPrice(item.id, Math.round(newPrice * 100) / 100);
+  const handleCardKeyDown = (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleCardClick();
     }
-
-    setIsEditing(false);
   };
 
-  const handleCancelEdit = () => {
-    setIsEditing(false);
+  const handleStartEditTitle = (e) => {
+    e.stopPropagation();
+    if (readOnly || isRemoving) return;
+    setEditTitleValue(item.title);
+    setIsEditingTitle(true);
+  };
+
+  const handleSaveTitle = () => {
+    const val = editTitleValue.trim();
+    if (val && typeof onEditTitle === 'function') onEditTitle(item.id, val);
+    setIsEditingTitle(false);
+  };
+
+  const handleTitleKeyDown = (e) => {
+    if (e.key === 'Enter')  handleSaveTitle();
+    if (e.key === 'Escape') setIsEditingTitle(false);
+  };
+
+  const handleStartEditPrice = (e) => {
+    e.stopPropagation();
+    if (readOnly || isRemoving) return;
+    setEditPriceValue(String(item.price));
+    setIsEditingPrice(true);
+  };
+
+  const handleSavePrice = () => {
+    const val = parseFloat(editPriceValue.replace(',', '.'));
+    if (!isNaN(val) && val >= 0) onEditPrice(item.id, Math.round(val * 100) / 100);
+    setIsEditingPrice(false);
   };
 
   const handlePriceKeyDown = (e) => {
-    if (e.key === 'Enter') handleSaveEdit();
-    if (e.key === 'Escape') handleCancelEdit();
-  };
-
-  const handlePriceButtonKeyDown = (e) => {
-    if (readOnly) return;
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      handleStartEdit();
-    }
+    if (e.key === 'Enter')  handleSavePrice();
+    if (e.key === 'Escape') setIsEditingPrice(false);
   };
 
   const handleCategoryChange = (e) => {
+    e.stopPropagation();
     if (readOnly || typeof onEditCategory !== 'function') return;
     onEditCategory(item.id, e.target.value);
   };
 
-  const handleDelete = useCallback(() => {
+  const handleDelete = useCallback((e) => {
+    if (e) e.stopPropagation();
     if (readOnly || isRemoving) return;
-
     setIsRemoving(true);
-
-    setTimeout(function () {
-      onDelete(item.id);
-    }, 280);
+    setTimeout(() => onDelete(item.id), 250);
   }, [item.id, onDelete, readOnly, isRemoving]);
 
   useEffect(() => {
@@ -87,41 +109,32 @@ export default function ReceiptItem({
     if (!el || readOnly) return;
 
     function onTouchStart(e) {
-      if (isEditing || isRemoving) return;
-
-      touchStartX.current = e.touches[0].clientX;
-      touchStartY.current = e.touches[0].clientY;
-      isHorizontalSwipe.current = false;
-      currentSwipeX.current = 0;
-
+      if (isEditingPrice || isEditingTitle || isRemoving) return;
+      touchStartX.current        = e.touches[0].clientX;
+      touchStartY.current        = e.touches[0].clientY;
+      isHorizontalSwipe.current  = false;
+      currentSwipeX.current      = 0;
       setIsSwiping(true);
     }
 
     function onTouchMove(e) {
       if (!isHorizontalSwipe.current && currentSwipeX.current === 0) {
-        var diffX = touchStartX.current - e.touches[0].clientX;
-        var diffY = Math.abs(touchStartY.current - e.touches[0].clientY);
-
-        if (Math.abs(diffX) > 10 || diffY > 10) {
-          isHorizontalSwipe.current = Math.abs(diffX) > diffY;
-
+        const dx = touchStartX.current - e.touches[0].clientX;
+        const dy = Math.abs(touchStartY.current - e.touches[0].clientY);
+        if (Math.abs(dx) > 10 || dy > 10) {
+          isHorizontalSwipe.current = Math.abs(dx) > dy;
           if (!isHorizontalSwipe.current) {
             setIsSwiping(false);
             setSwipeX(0);
             return;
           }
-        } else {
-          return;
-        }
+        } else return;
       }
-
       if (isHorizontalSwipe.current) {
-        var dx = touchStartX.current - e.touches[0].clientX;
-
+        const dx = touchStartX.current - e.touches[0].clientX;
         if (dx > 0) {
           e.preventDefault();
-
-          var capped = dx > 80 ? 80 + (dx - 80) * 0.3 : dx;
+          const capped = dx > 80 ? 80 + (dx - 80) * 0.3 : dx;
           currentSwipeX.current = Math.min(capped, 120);
           setSwipeX(currentSwipeX.current);
         } else {
@@ -132,10 +145,7 @@ export default function ReceiptItem({
     }
 
     function onTouchEnd() {
-      if (currentSwipeX.current >= 60) {
-        handleDelete();
-      }
-
+      if (currentSwipeX.current >= 60) handleDelete();
       currentSwipeX.current = 0;
       setSwipeX(0);
       setIsSwiping(false);
@@ -143,77 +153,111 @@ export default function ReceiptItem({
     }
 
     el.addEventListener('touchstart', onTouchStart, { passive: true });
-    el.addEventListener('touchmove', onTouchMove, { passive: false });
-    el.addEventListener('touchend', onTouchEnd, { passive: true });
+    el.addEventListener('touchmove',  onTouchMove,  { passive: false });
+    el.addEventListener('touchend',   onTouchEnd,   { passive: true });
 
-    return function () {
+    return () => {
       el.removeEventListener('touchstart', onTouchStart);
-      el.removeEventListener('touchmove', onTouchMove);
-      el.removeEventListener('touchend', onTouchEnd);
+      el.removeEventListener('touchmove',  onTouchMove);
+      el.removeEventListener('touchend',   onTouchEnd);
     };
-  }, [readOnly, isEditing, isRemoving, handleDelete]);
+  }, [readOnly, isEditingPrice, isEditingTitle, isRemoving, handleDelete]);
+
+  const cardClass = [
+    'receipt-item-card',
+    isSwiping && swipeX > 0 ? 'swiping'        : '',
+    isSelected              ? 'is-selected'    : '',
+    isLowConfidence         ? 'low-confidence' : '',
+    isLearnedExact          ? 'learned-exact'  : '',
+  ].filter(Boolean).join(' ');
 
   return (
     <li
       ref={itemRef}
-      className={
-        'receipt-item' +
-        (readOnly ? ' read-only' : '') +
-        (isRemoving ? ' removing' : '')
-      }
+      data-item-id={item.id}
+      className={[
+        'receipt-item',
+        readOnly                    ? 'read-only' : '',
+        isRemoving                  ? 'removing'  : '',
+        isSwiping && swipeX > 0    ? 'is-swiping' : '',
+      ].filter(Boolean).join(' ')}
     >
       {!readOnly && (
-        <div className="receipt-item-delete-zone" aria-hidden="true">
+        <div className="receipt-item-swipe-bg" aria-hidden="true">
           <Trash2 size={20} strokeWidth={2} />
         </div>
       )}
 
       <div
-        className={
-          'receipt-item-content' +
-          (isSwiping && swipeX > 0 ? ' swiping' : '') +
-          (isLowConfidence ? ' low-confidence' : '') +
-          (isLearnedExact ? ' learned-exact' : '')
-        }
-        style={
-          swipeX > 0
-            ? { transform: 'translateX(-' + swipeX + 'px)' }
-            : undefined
-        }
+        className={cardClass}
+        style={swipeX > 0 ? { transform: `translateX(-${swipeX}px)` } : undefined}
+        onClick={handleCardClick}
+        onKeyDown={handleCardKeyDown}
+        role={readOnly ? undefined : 'button'}
+        tabIndex={readOnly ? undefined : 0}
+        aria-pressed={readOnly ? undefined : isSelected}
+        aria-label={`${item.title}, ${formatPriceShort(item.price)}`}
       >
-        <div className="item-main">
-          <div className="item-info">
-            <span className="item-number">{index + 1}.</span>
-            <span className="item-title">{item.title}</span>
-          </div>
+        {/* ── Строка 1: номер · название · цена ── */}
+        <div className="item-row-top">
+
+          <span className="item-number" aria-hidden="true">
+            {index + 1}
+          </span>
+
+          {isEditingTitle ? (
+            <input
+              className="item-title-input"
+              type="text"
+              value={editTitleValue}
+              onChange={(e) => setEditTitleValue(e.target.value)}
+              onKeyDown={handleTitleKeyDown}
+              onBlur={handleSaveTitle}
+              onClick={(e) => e.stopPropagation()}
+              autoFocus
+              aria-label="Название товара"
+            />
+          ) : (
+            <button
+              type="button"
+              className={`item-title-btn${!readOnly ? ' editable' : ''}`}
+              onClick={handleStartEditTitle}
+              disabled={readOnly}
+              tabIndex={readOnly ? -1 : 0}
+              aria-label={readOnly ? item.title : `Изменить название: ${item.title}`}
+            >
+              {item.title}
+            </button>
+          )}
 
           <div className="item-price-block">
-            {isEditing ? (
-              <div className="item-price-edit">
+            {isEditingPrice ? (
+              <div className="item-price-input-wrap">
                 <input
-                  className="price-edit-input"
+                  className="item-price-input"
                   type="text"
                   inputMode="decimal"
-                  value={editValue}
-                  onChange={(e) => setEditValue(e.target.value)}
+                  value={editPriceValue}
+                  onChange={(e) => setEditPriceValue(e.target.value)}
                   onKeyDown={handlePriceKeyDown}
-                  onBlur={handleSaveEdit}
+                  onBlur={handleSavePrice}
+                  onClick={(e) => e.stopPropagation()}
                   autoFocus
                   aria-label="Цена товара"
                 />
-                <span className="price-edit-currency">₽</span>
+                <span className="item-price-currency">₽</span>
               </div>
             ) : (
               <button
                 type="button"
-                className={'item-price' + (!readOnly ? ' editable' : '')}
-                onClick={handleStartEdit}
-                onKeyDown={handlePriceButtonKeyDown}
+                className={`item-price-btn${!readOnly ? ' editable' : ''}`}
+                onClick={handleStartEditPrice}
                 disabled={readOnly}
+                tabIndex={readOnly ? -1 : 0}
                 aria-label={
                   readOnly
-                    ? 'Цена товара'
-                    : 'Редактировать цену: ' + formatPriceShort(item.price)
+                    ? `Цена: ${formatPriceShort(item.price)}`
+                    : `Изменить цену: ${formatPriceShort(item.price)}`
                 }
               >
                 {formatPriceShort(item.price)}
@@ -222,59 +266,68 @@ export default function ReceiptItem({
           </div>
         </div>
 
-        <div className="item-bottom">
-          <div className="item-category-area">
-            {readOnly ? (
-              <CategoryBadge categoryKey={item.category} />
-            ) : (
-              <label className="item-category-editor">
-                <span className="sr-only">Категория товара</span>
-                <select
-                  className={
-                    'item-category-select' +
-                    (isLowConfidence ? ' item-category-select--low-confidence' : '') +
-                    (isLearnedExact ? ' item-category-select--learned' : '')
-                  }
-                  value={item.category}
-                  onChange={handleCategoryChange}
-                  aria-label={'Категория товара ' + item.title}
-                >
-                  {CATEGORIES.map((category) => (
-                    <option key={category.key} value={category.key}>
-                      {category.name}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            )}
+        {/* ── Строка 2: категория · подсказки · удаление ── */}
+        <div className="item-row-bottom">
 
-            {isLowConfidence && !readOnly && (
-              <div className="item-category-hint" role="note" aria-live="polite">
-                <AlertCircle size={14} strokeWidth={2} aria-hidden="true" />
-                <span>Проверьте категорию</span>
-              </div>
-            )}
+          {readOnly ? (
+            <span
+              className="item-category-badge"
+              style={{ color: catColor, borderColor: catColor, background: catBg }}
+            >
+              {category?.name ?? 'Другое'}
+            </span>
+          ) : (
+            <select
+              className="item-category-select"
+              value={item.category}
+              onChange={handleCategoryChange}
+              onClick={(e) => e.stopPropagation()}
+              style={{ color: catColor, background: catBg, borderColor: catColor }}
+              aria-label={`Категория: ${category?.name}`}
+            >
+              {CATEGORIES.map((cat) => (
+                <option key={cat.key} value={cat.key}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
+          )}
 
-            {isLearnedExact && !readOnly && (
-              <div className="item-category-hint item-category-hint--learned" role="note">
-                <Brain size={14} strokeWidth={2} aria-hidden="true" />
-                <span>Учтено по вашим исправлениям</span>
-              </div>
-            )}
-          </div>
+          {isLowConfidence && !readOnly && (
+            <span
+              className="item-quality-hint"
+              title="Категория определена неуверенно — проверьте"
+            >
+              <AlertCircle size={11} strokeWidth={2.5} aria-hidden="true" />
+              <span>проверьте</span>
+            </span>
+          )}
 
+          {isLearnedExact && !readOnly && (
+            <span
+              className="item-quality-hint item-quality-hint--learned"
+              title="Категория учтена по вашим исправлениям"
+            >
+              <Brain size={11} strokeWidth={2.5} aria-hidden="true" />
+            </span>
+          )}
+
+          <span className="item-row-bottom-spacer" aria-hidden="true" />
+
+          {/* Единственная кнопка удаления — только здесь */}
           {!readOnly && (
             <button
               type="button"
               className="item-delete-btn"
               onClick={handleDelete}
-              title="Удалить"
-              aria-label={'Удалить позицию ' + item.title}
+              tabIndex={0}
+              aria-label={`Удалить: ${item.title}`}
             >
-              <X size={16} strokeWidth={2.5} aria-hidden="true" />
+              <Trash2 size={16} strokeWidth={2} aria-hidden="true" />
             </button>
           )}
         </div>
+
       </div>
     </li>
   );

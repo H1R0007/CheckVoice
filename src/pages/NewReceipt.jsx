@@ -138,6 +138,7 @@ export default function NewReceipt({
   items,
   onDeleteItem,
   onEditPrice,
+  onEditTitle,
   onEditCategory,
   onClearReceipt,
   onSaveReceipt,
@@ -241,7 +242,9 @@ export default function NewReceipt({
             items={items}
             onDelete={onDeleteItem}
             onEditPrice={onEditPrice}
+            onEditTitle={onEditTitle}
             onEditCategory={onEditCategory}
+            isActive={true}
           />
         ) : (
           <EmptyState

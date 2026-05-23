@@ -929,6 +929,19 @@ export class App extends React.Component {
     this.setState(newState);
   };
 
+  handleEditTitleManual = (itemId, newTitle) => {
+    this.setState((prevState) => ({
+      currentReceipt: {
+        ...prevState.currentReceipt,
+        items: prevState.currentReceipt.items.map((item) =>
+          item.id === itemId
+            ? { ...item, title: newTitle }
+            : item
+        ),
+      },
+    }));
+  };
+
   handleEditCategoryManual = (itemId, newCategory) => {
     const item = this.state.currentReceipt.items.find((i) => i.id === itemId);
     if (!item) return;
@@ -1165,6 +1178,7 @@ export class App extends React.Component {
                 items={currentReceipt.items}
                 onDeleteItem={this.handleDeleteItemManual}
                 onEditPrice={this.handleEditPriceManual}
+                onEditTitle={this.handleEditTitleManual}
                 onEditCategory={this.handleEditCategoryManual}
                 onClearReceipt={this.handleClearReceiptManual}
                 onSaveReceipt={this.handleSaveReceiptManual}

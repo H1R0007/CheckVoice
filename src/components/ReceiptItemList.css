@@ -1,138 +1,123 @@
 /* src/components/ReceiptItemList.css */
 
-.receipt-item-list-wrapper {
-    position: relative;
+.receipt-list-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
 }
 
+/* Сам список — без рамки, карточки сами себя оформляют */
 .receipt-item-list {
-    position: relative;
-    overflow: visible;
+    list-style: none;
     margin: 0;
     padding: 0;
-    list-style: none;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    background-color: var(--color-bg-surface);
-    box-shadow: var(--shadow-xs);
 }
 
-/* Декоративный «зубчатый» край */
-.receipt-item-list > li:last-child::after {
-    content: '';
-    display: block;
-    height: 10px;
-    pointer-events: none;
-    background:
-        linear-gradient(-45deg, var(--color-bg-primary) 4px, transparent 0) left / 8px 100% repeat-x,
-        linear-gradient( 45deg, var(--color-bg-primary) 4px, transparent 0) left / 8px 100% repeat-x;
-    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-}
-
-/* ============================================
-   Постраничная навигация
-   ============================================ */
+/* ─────────────────────────────────────────────────
+   Пагинация
+───────────────────────────────────────────────── */
 
 .receipt-pagination {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--space-3);
-    margin-top: var(--space-4);
-    padding: var(--space-3) var(--space-2);
+    gap: var(--space-2);
+    padding: var(--space-1) 0;
 }
 
 .pagination-btn {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: var(--space-2);
-    min-width: 120px;
-    height: var(--btn-height-sm);
+    gap: var(--space-1);
+
+    /* Зона касания удобная и для пальца и для пульта */
+    height: 44px;
+    min-width: 110px;
     padding: 0 var(--space-4);
-    border: 1px solid var(--color-border);
+
+    border: 1.5px solid var(--color-border);
     border-radius: var(--radius-md);
-    background-color: var(--color-bg-surface);
-    color: var(--color-text-primary);
+    background: var(--color-bg-surface);
+    color: var(--color-text-secondary);
+    box-shadow: var(--shadow-xs);
+
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-semibold);
     cursor: pointer;
+
     transition:
         background-color var(--transition-fast),
-        border-color var(--transition-fast),
-        color var(--transition-fast),
-        opacity var(--transition-fast),
-        transform var(--transition-fast);
+        border-color     var(--transition-fast),
+        color            var(--transition-fast),
+        box-shadow       var(--transition-fast),
+        transform        var(--transition-fast);
 }
 
 .pagination-btn:disabled {
-    opacity: 0.4;
+    opacity: 0.38;
     cursor: not-allowed;
     pointer-events: none;
 }
 
-.pagination-btn:not(:disabled):hover {
-    background-color: var(--color-bg-surface-hover);
-    border-color: var(--color-accent);
-    color: var(--color-accent);
+@media (hover: hover) and (pointer: fine) {
+    .pagination-btn:not(:disabled):hover {
+        background: var(--color-bg-surface-hover);
+        border-color: var(--color-accent);
+        color: var(--color-accent);
+        box-shadow: var(--shadow-sm);
+    }
 }
 
 .pagination-btn:not(:disabled):active {
-    transform: scale(0.97);
+    transform: scale(0.96);
+    box-shadow: var(--shadow-xs);
 }
 
 .pagination-btn:focus-visible {
     outline: var(--focus-ring-width) solid var(--focus-ring-color);
     outline-offset: var(--focus-ring-offset);
+    border-color: var(--color-accent);
 }
 
 .is-tv-device .pagination-btn:focus {
     outline: var(--focus-ring-width) solid var(--focus-ring-color);
     outline-offset: var(--focus-ring-offset);
-    background-color: var(--color-accent-soft);
+    background: var(--color-accent-soft);
     border-color: var(--color-accent);
+    color: var(--color-accent);
 }
 
-.pagination-btn-text {
+/* Скрываем текст на совсем маленьких экранах */
+.pagination-btn-label {
     white-space: nowrap;
 }
 
-.pagination-indicator {
-    display: flex;
-    align-items: baseline;
-    gap: var(--space-1);
-    font-family: var(--font-family-mono);
-    font-size: var(--font-size-base);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-text-secondary);
-    user-select: none;
-}
-
-.pagination-current {
-    color: var(--color-accent);
-    font-size: var(--font-size-lg);
-}
-
-.pagination-divider {
-    color: var(--color-text-placeholder);
-}
-
-.pagination-total {
-    color: var(--color-text-tertiary);
-}
-
-/* ============================================
-   Адаптив
-   ============================================ */
-
-@media (max-width: 480px) {
+@media (max-width: 380px) {
     .pagination-btn {
-        min-width: 100px;
-        padding: 0 var(--space-3);
+        min-width: 48px;
+        padding: 0 var(--space-2);
     }
-
-    .pagination-btn-text {
+    .pagination-btn-label {
         display: none;
     }
+}
+
+/* Индикатор страницы */
+.pagination-info {
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-tertiary);
+    text-align: center;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.pagination-info strong {
+    color: var(--color-accent);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-bold);
 }
 
 @media (prefers-reduced-motion: reduce) {

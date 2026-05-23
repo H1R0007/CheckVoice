@@ -1,366 +1,441 @@
 /* src/components/ReceiptItem.css */
 
+/* ─── Обёртка ─────────────────────────────────── */
+
 .receipt-item {
     position: relative;
     overflow: hidden;
-    border-bottom: 1px dashed var(--color-border-dashed);
-    touch-action: pan-y;
-    animation: cv-item-in 250ms ease-out both;
-    /* Гарантируем что элемент фокусируем при навигации с пульта */
-    scroll-margin: var(--space-4);
-    scroll-margin-block: var(--space-4);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-2);
+    animation: cv-item-in 200ms ease-out both;
 }
 
-.receipt-item:last-child {
-    border-bottom: none;
-}
+.receipt-item:last-child { margin-bottom: 0; }
 
 @keyframes cv-item-in {
-    from { opacity: 0; transform: translateY(6px); }
+    from { opacity: 0; transform: translateY(5px); }
     to   { opacity: 1; transform: translateY(0); }
 }
 
-/* --- Зона свайпа удаления --- */
+.receipt-item.removing {
+    animation: cv-item-out 250ms ease-in forwards;
+    pointer-events: none;
+}
 
-.receipt-item-delete-zone {
+@keyframes cv-item-out {
+    0%   { opacity: 1; max-height: 110px; margin-bottom: var(--space-2); }
+    50%  { opacity: 0; }
+    100% { opacity: 0; max-height: 0; margin-bottom: 0; }
+}
+
+/* ─── Свайп-фон ────────────────────────────────── */
+
+.receipt-item-swipe-bg {
     position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
+    inset: 0;
     display: flex;
     align-items: center;
     justify-content: flex-end;
     padding-right: var(--space-6);
-    background-color: var(--color-danger);
-    color: var(--color-text-inverse);
+    background: var(--color-danger-medium);
+    color: var(--color-danger);
+    border-radius: var(--radius-lg);
+    pointer-events: none;
+
+    /* По умолчанию скрыт */
+    opacity: 0;
+    transition: opacity 120ms ease;
 }
 
-/* --- Основной контент --- */
+/* Виден только во время свайпа */
+.receipt-item.is-swiping .receipt-item-swipe-bg {
+    opacity: 1;
+}
 
-.receipt-item-content {
+/* Показываем только когда карточка реально едет */
+.receipt-item-card.swiping ~ .receipt-item-swipe-bg,
+.receipt-item-swipe-bg:has(~ .receipt-item-card.swiping) {
+    opacity: 1;
+}
+
+/* ─── Карточка ─────────────────────────────────── */
+
+.receipt-item-card {
     position: relative;
     z-index: 1;
-    padding: var(--space-4) var(--space-5);
-    background-color: var(--color-bg-surface);
-    transition:
-        transform 200ms ease-out,
-        background-color var(--transition-fast),
-        box-shadow var(--transition-fast),
-        outline var(--transition-fast);
+
+    display: grid;
+    grid-template-rows: auto auto;
+
+    padding: var(--space-3) var(--space-4);
+    min-height: 84px;
+
+    background: var(--color-bg-surface);
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xs);
+
+    /* Убираем системный коричневый highlight при тапе */
+    -webkit-tap-highlight-color: transparent;
+
+    cursor: pointer;
+    user-select: none;
     will-change: transform;
-    transform: translateZ(0);
-    backface-visibility: hidden;
-    /* Минимальная высота строки для удобства нажатия на ТВ */
-    min-height: 72px;
+
+    transition:
+        background-color 140ms ease,
+        border-color     140ms ease,
+        box-shadow       140ms ease,
+        transform        160ms ease-out;
 }
 
-.receipt-item-content.swiping {
-    transition: none;
-}
+.receipt-item-card.swiping { transition: none; }
 
-.receipt-item-content.low-confidence {
-    box-shadow: inset 4px 0 0 var(--color-warning);
-}
-
-.receipt-item-content.learned-exact {
-    box-shadow: inset 4px 0 0 var(--color-accent);
-}
-
-/* Фокус на элементе списка (ТВ-навигация) */
-.receipt-item:focus-within .receipt-item-content {
-    outline: var(--focus-ring-width) solid var(--focus-ring-color);
-    outline-offset: calc(var(--focus-ring-offset) * -1);
-}
-
-.is-tv-device .receipt-item:focus-within .receipt-item-content {
-    background-color: var(--color-accent-soft);
-    outline: var(--focus-ring-width) solid var(--focus-ring-color);
-    outline-offset: calc(var(--focus-ring-offset) * -1);
-}
-
+/* Hover — только мышь */
 @media (hover: hover) and (pointer: fine) {
-    .receipt-item:not(.read-only) .receipt-item-content:hover {
-        background-color: var(--color-bg-surface-hover);
+    .receipt-item:not(.read-only) .receipt-item-card:hover {
+        border-color: var(--color-border-hover);
+        box-shadow: var(--shadow-sm);
     }
 }
 
-/* --- Верхняя строка элемента --- */
-
-.item-main {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: var(--space-2);
-    gap: var(--space-3);
+/* Нажатие — явный цвет вместо браузерного */
+.receipt-item:not(.read-only) .receipt-item-card:active {
+    background: var(--color-bg-inset);
 }
 
-.item-info {
+/* Выбранная — акцент, стоит после :hover в каскаде */
+.receipt-item-card.is-selected {
+    border-color: var(--color-accent) !important;
+    box-shadow: 0 0 0 2px var(--color-accent-soft) !important;
+    background: var(--color-accent-soft) !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .receipt-item-card.is-selected:hover {
+        background: var(--color-accent-medium) !important;
+    }
+}
+
+/* Фокус клавиатуры — только :focus-visible, не срабатывает при клике мышью */
+.receipt-item-card:focus-visible {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 2px var(--color-accent-soft);
+}
+
+.is-tv-device .receipt-item-card:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px var(--color-accent-soft);
+    background: var(--color-accent-soft);
+}
+
+/* Боковая полоска уверенности */
+.receipt-item-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 18%;
+    bottom: 18%;
+    width: 3px;
+    border-radius: 0 2px 2px 0;
+    background: transparent;
+    transition: background-color 140ms ease;
+}
+
+.receipt-item-card.low-confidence::before { background: var(--color-warning); }
+.receipt-item-card.learned-exact::before  { background: var(--color-accent); }
+
+/* ─── Строка 1: номер · название · цена ────────── */
+
+.item-row-top {
     display: flex;
-    flex: 1;
-    min-width: 0;
-    gap: var(--space-2);
-    align-items: flex-start;
+    align-items: center;
+    gap: var(--space-3);
+    min-height: 44px;
 }
 
 .item-number {
     flex-shrink: 0;
-    min-width: 28px;
+    width: 22px;
     font-family: var(--font-family-mono);
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-xs);
     font-weight: var(--font-weight-medium);
-    color: var(--color-text-tertiary);
-    line-height: var(--line-height-base);
+    color: var(--color-text-placeholder);
+    text-align: right;
+    line-height: 1;
+    user-select: none;
 }
 
-.item-title {
-    color: var(--color-text-primary);
+/* Кнопка-название */
+.item-title-btn {
+    all: unset;
+    box-sizing: border-box;
+    flex: 1 1 0%;
+    min-width: 0;
+
     font-size: var(--font-size-base);
     font-weight: var(--font-weight-semibold);
-    line-height: var(--line-height-base);
-    word-break: break-word;
-}
-
-/* --- Цена --- */
-
-.item-price-block {
-    flex-shrink: 0;
-}
-
-.item-price {
-    padding: var(--space-1) var(--space-2);
-    border: none;
-    background: none;
-    font-family: var(--font-family-mono);
-    font-size: var(--font-size-md);
-    font-weight: var(--font-weight-bold);
     color: var(--color-text-primary);
-    white-space: nowrap;
-    line-height: 1.2;
-    border-radius: var(--radius-sm);
-}
+    line-height: 1.35;
+    word-break: break-word;
+    white-space: normal;
 
-.item-price.editable {
-    cursor: pointer;
-    border-bottom: 2px dashed var(--color-border-dashed);
-    transition:
-        border-color var(--transition-fast),
-        color var(--transition-fast),
-        background-color var(--transition-fast);
-}
-
-.item-price:disabled {
+    border-radius: var(--radius-xs);
+    padding: var(--space-1);
     cursor: default;
-    opacity: 1;
+    transition: color 140ms ease, background-color 140ms ease;
 }
 
-.item-price:focus-visible {
-    outline: var(--focus-ring-width) solid var(--focus-ring-color);
-    outline-offset: var(--focus-ring-offset);
-    border-radius: var(--radius-sm);
-    border-bottom-color: transparent;
-}
+.item-title-btn.editable { cursor: pointer; }
 
 @media (hover: hover) and (pointer: fine) {
-    .item-price.editable:hover {
-        border-color: var(--color-accent);
+    .item-title-btn.editable:hover {
         color: var(--color-accent);
-        background-color: var(--color-accent-soft);
+        text-decoration: underline dashed;
+        text-decoration-color: var(--color-accent);
+        text-underline-offset: 3px;
     }
 }
 
-/* --- Редактирование цены --- */
-
-.item-price-edit {
-    display: flex;
-    align-items: center;
-    gap: var(--space-1);
+.item-title-btn:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
 }
 
-.price-edit-input {
-    width: 100px;
-    padding: var(--space-2) var(--space-3);
-    border: 2px solid var(--color-accent);
+/* Инпут названия — тонкий, без box-shadow */
+.item-title-input {
+    flex: 1 1 0%;
+    min-width: 0;
+    padding: var(--space-1) var(--space-2);
+
+    /* Фиксированный border в px — не раздувается на ТВ */
+    border: 1.5px solid var(--color-accent);
+    border-radius: 8px;
+
+    background: var(--color-bg-inset);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.35;
+    outline: none;
+    /* box-shadow убран намеренно */
+}
+
+/* Блок цены */
+.item-price-block {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    min-width: 76px;
+    justify-content: flex-end;
+}
+
+/* Кнопка-цена */
+.item-price-btn {
+    all: unset;
+    box-sizing: border-box;
+    display: block;
+    text-align: right;
+
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    white-space: nowrap;
+    line-height: 1;
+
+    padding: var(--space-1) var(--space-2);
     border-radius: var(--radius-sm);
-    background-color: var(--color-bg-inset);
+    cursor: default;
+    transition: color 140ms ease, background-color 140ms ease;
+}
+
+.item-price-btn.editable {
+    cursor: pointer;
+    border-bottom: 2px dashed var(--color-border-dashed);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .item-price-btn.editable:hover {
+        color: var(--color-accent);
+        border-bottom-color: var(--color-accent);
+        background: var(--color-accent-soft);
+    }
+}
+
+.item-price-btn:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+/* Инпут цены — тонкий, без box-shadow */
+.item-price-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.item-price-input {
+    width: 84px;
+    padding: var(--space-1) var(--space-2);
+
+    /* Фиксированный border в px */
+    border: 1.5px solid var(--color-accent);
+    border-radius: 8px;
+
+    background: var(--color-bg-inset);
     color: var(--color-text-primary);
     font-family: var(--font-family-mono);
     font-size: var(--font-size-md);
     font-weight: var(--font-weight-bold);
     text-align: right;
     outline: none;
-    transition:
-        border-color var(--transition-fast),
-        box-shadow var(--transition-fast);
+    /* box-shadow убран намеренно */
 }
 
-.price-edit-input:focus-visible {
-    border-color: var(--color-accent-hover);
-    box-shadow: 0 0 0 4px var(--color-accent-soft);
-}
-
-.price-edit-currency {
+.item-price-currency {
     font-family: var(--font-family-mono);
-    font-size: var(--font-size-md);
+    font-size: var(--font-size-sm);
     font-weight: var(--font-weight-bold);
     color: var(--color-text-tertiary);
+    line-height: 1;
 }
 
-/* --- Нижняя строка --- */
+/* ─── Строка 2: категория · подсказки · удаление ── */
 
-.item-bottom {
+.item-row-bottom {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: var(--space-3);
-    flex-wrap: wrap;
-}
-
-.item-category-area {
-    flex: 1;
-    min-width: 0;
-}
-
-.item-category-editor {
-    display: block;
-    min-width: 0;
+    gap: var(--space-2);
+    padding-left: calc(22px + var(--space-3));
+    padding-top: var(--space-2);
+    min-height: 36px;
 }
 
 .item-category-select {
-    max-width: 260px;
-    width: 100%;
-    height: var(--btn-height-sm);
-    padding: 0 var(--space-3);
-    border: 1px solid var(--color-border);
+    appearance: none;
+    -webkit-appearance: none;
+
+    padding: 3px 22px 3px var(--space-2);
+    border: 1px solid currentColor;
     border-radius: var(--radius-pill);
-    background-color: var(--color-bg-surface);
-    color: var(--color-text-primary);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-    outline: none;
+
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.2;
+
     cursor: pointer;
-    transition:
-        border-color var(--transition-fast),
-        background-color var(--transition-fast),
-        box-shadow var(--transition-fast);
+    outline: none;
+    max-width: 190px;
+
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 6px center;
+
+    transition: opacity 140ms ease;
 }
 
-.item-category-select:hover {
-    border-color: var(--color-border-hover);
-    background-color: var(--color-bg-surface-hover);
-}
+.item-category-select:hover { opacity: 0.85; }
 
-.item-category-select:focus-visible {
-    border-color: var(--color-accent);
-    box-shadow: 0 0 0 var(--focus-ring-width) var(--color-accent-soft);
-}
-
+.item-category-select:focus-visible,
 .is-tv-device .item-category-select:focus {
-    border-color: var(--color-accent);
-    box-shadow: 0 0 0 var(--focus-ring-width) var(--color-accent-soft);
+    /* Только граница — без раздутого кольца */
+    border-color: var(--color-accent) !important;
+    opacity: 1;
 }
 
-.item-category-select--low-confidence {
-    border-color: var(--color-warning);
-    box-shadow: 0 0 0 2px var(--color-warning-soft);
-}
-
-.item-category-select--learned {
-    border-color: var(--color-accent);
-    box-shadow: 0 0 0 2px var(--color-accent-soft);
-}
-
-.item-category-hint {
-    margin-top: var(--space-1);
+.item-category-badge {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    padding: 3px var(--space-2);
+    border: 1px solid currentColor;
+    border-radius: var(--radius-pill);
     font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+.item-quality-hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 10px;
+    font-weight: var(--font-weight-medium);
     color: var(--color-warning);
-    line-height: 1.3;
+    white-space: nowrap;
 }
 
-.item-category-hint--learned {
-    color: var(--color-accent);
-}
+.item-quality-hint--learned { color: var(--color-accent); }
 
-/* --- Кнопка удаления --- */
+.item-row-bottom-spacer { flex: 1; }
 
+/* Единственная кнопка удаления */
 .item-delete-btn {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    /* Большая зона касания */
     width: 44px;
-    height: 44px;
-    border: none;
+    height: 32px;
+
+    border: 1px solid transparent;
     border-radius: var(--radius-md);
     background: none;
     color: var(--color-text-placeholder);
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+
     transition:
-        color var(--transition-fast),
-        background-color var(--transition-fast),
-        transform var(--transition-fast);
-}
-
-.item-delete-btn:active {
-    transform: scale(0.94);
-}
-
-.item-delete-btn:focus-visible {
-    outline: var(--focus-ring-width) solid var(--color-danger);
-    outline-offset: var(--focus-ring-offset);
-    border-radius: var(--radius-md);
-}
-
-.is-tv-device .item-delete-btn:focus {
-    outline: var(--focus-ring-width) solid var(--color-danger);
-    outline-offset: var(--focus-ring-offset);
-    background-color: var(--color-danger-soft);
-    color: var(--color-danger);
+        color       140ms ease,
+        background  140ms ease,
+        border-color 140ms ease,
+        transform   140ms ease;
 }
 
 @media (hover: hover) and (pointer: fine) {
     .item-delete-btn:hover {
         color: var(--color-danger);
-        background-color: var(--color-danger-soft);
+        background: var(--color-danger-soft);
+        border-color: var(--color-danger-medium);
     }
 }
 
-/* --- Удаление --- */
+.item-delete-btn:active { transform: scale(0.90); }
 
-.receipt-item.removing {
-    animation: cv-item-slide-out 300ms ease-in forwards;
-    pointer-events: none;
+.item-delete-btn:focus-visible {
+    outline: 2px solid var(--color-danger);
+    outline-offset: 2px;
+    color: var(--color-danger);
+    background: var(--color-danger-soft);
 }
 
-@keyframes cv-item-slide-out {
-    0%   { opacity: 1; max-height: 200px; }
-    40%  { opacity: 0; }
-    100% { opacity: 0; max-height: 0; border-bottom-width: 0; overflow: hidden; }
+.is-tv-device .item-delete-btn:focus {
+    outline: 2px solid var(--color-danger);
+    outline-offset: 2px;
+    color: var(--color-danger);
+    background: var(--color-danger-soft);
+    border-color: var(--color-danger-medium);
 }
+
+/* ─── Утилиты ──────────────────────────────────── */
 
 .sr-only {
     position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
     overflow: hidden;
-    clip: rect(0, 0, 0, 0);
+    clip: rect(0,0,0,0);
     white-space: nowrap;
     border: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
     .receipt-item,
-    .receipt-item-content,
-    .item-price,
-    .price-edit-input,
-    .item-delete-btn,
-    .item-category-select,
+    .receipt-item-card,
     .receipt-item.removing {
         animation: none !important;
         transition: none !important;
