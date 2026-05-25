@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/CheckVoice/static/css/main.cf063683.css",
-    "main.js": "/CheckVoice/static/js/main.0e789a6f.js",
+    "main.js": "/CheckVoice/static/js/main.b284bccf.js",
     "index.html": "/CheckVoice/index.html",
     "main.cf063683.css.map": "/CheckVoice/static/css/main.cf063683.css.map",
-    "main.0e789a6f.js.map": "/CheckVoice/static/js/main.0e789a6f.js.map"
+    "main.b284bccf.js.map": "/CheckVoice/static/js/main.b284bccf.js.map"
   },
   "entrypoints": [
     "static/css/main.cf063683.css",
-    "static/js/main.0e789a6f.js"
+    "static/js/main.b284bccf.js"
   ]
 }
